@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
@@ -7,12 +7,70 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as color from '../styles/Colors';
+import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     const demoPic = require('../assets/demoPic.png');
+    let errorState = {
+        firstName: useState(false),
+        lastName: useState(false),
+        phone: useState(false),
+    };
+    const isFieldError = () => {
+        if (errorState.firstName[0] === false &&
+            errorState.lastName[0] === false &&
+            errorState.phone[0] === false) {
+            if (info.firstName.length > 0 &&
+                info.lastName.length > 0 &&
+                info.phone.length > 0) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const handleSignUp = () => {
+        return new Promise((resolve, reject) => {
+            if (isFieldError()) reject();
+            const infoToSend = {
+                email: info.email,
+                password: info.password,
+                confirmPassword: info.confirmPassword,
+                handle: info.studentID,
+                firstName: info.firstName,
+                lastName: info.lastName,
+                phone: info.phone
+            };
+            console.log(infoToSend);
+            //
+            // axios.post('https://asia-east2-k-cash-less.cloudfunctions.net/api/signup', infoToSend)
+            //     .then(res => {
+            //         console.log(res);
+            //         const resetAction = StackActions.reset({
+            //             index: 0,
+            //             actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+            //         });
+            //         navigation.dispatch(resetAction);
+            //         resolve();
+            //     })
+            //     .catch(error => {
+            //         console.log(error.response.data.handle);
+            //         Alert.alert('Error', error.response.data.handle);
+            //         reject();
+            //     });
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+            });
+            navigation.dispatch(resetAction);
+            resolve();
+        });
+    };
+
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -31,32 +89,32 @@ const SignUpP2 = ({navigation}) => {
                                 placeholder={'First Name'}
                                 onChangeText={(text) => setInfo({...info, firstName: text})}
                                 value={info.firstName}
+                                errorStatus={errorState.firstName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'First Name Must Not Be Empty'},
+                                ]}
                             />
                             <NormalTextInput
                                 placeholder={'Last Name'}
                                 onChangeText={(text) => setInfo({...info, lastName: text})}
                                 value={info.lastName}
+                                errorStatus={errorState.lastName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                                ]}
                             />
                             <NormalTextInput
                                 placeholder={'Phone'}
                                 onChangeText={(text) => setInfo({...info, phone: text})}
                                 value={info.phone}
+                                errorStatus={errorState.phone}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                                ]}
                             />
                         </View>
-                        <TransparentButton
-                            text={'Sign Up'}
-                            style={{backgroundColor: 'rgb(38,115,226)'}}
-                            onPress={() => {
-                                // TODO - firebase
-                                console.log('SEND');
-                                console.log(info);
-                                const resetAction = StackActions.reset({
-                                    index: 0,
-                                    actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
-                                });
-                                navigation.dispatch(resetAction);
-                            }}
-                        />
+                        <TransparentButton text={'Sign Up'} onPress={handleSignUp}
+                                           style={{backgroundColor: 'rgb(38,115,226)'}}/>
                     </KeyboardAwareScrollView>
                 </View>
             </View>

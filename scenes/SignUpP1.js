@@ -12,24 +12,34 @@ const SignUpP1 = ({navigation}) => {
         email: '',
         password: '',
         confirmPassword: '',
-        studentID: '',
         firstName: '',
         lastName: '',
         phone: ''
     });
-    const [errorMsg, setErrorMsg] = useState(' ');
-    const handleButtonPress = () => {
-        if (info.studentID.length === 0 ||
-            info.email.length === 0 ||
-            info.password.length === 0 ||
-            info.confirmPassword.length === 0
-        ) setErrorMsg('Incomplete Field');
-        else if (info.password !== info.confirmPassword) setErrorMsg('Password and Confirm Password don\'t match.');
-        else {
-            setErrorMsg(' ');
-            navigation.navigate('SignUpP2', {info: info});
-        }
+
+    let errorState = {
+        email: useState(false),
+        password: useState(false),
+        confirmPassword: useState(false),
     };
+
+    const handleButtonPress = () => {
+        return new Promise((resolve, reject) => {
+            Keyboard.dismiss;
+            if (errorState.email[0] === false &&
+                errorState.password[0] === false &&
+                errorState.confirmPassword[0] === false) {
+                if (info.email.length > 0 &&
+                    info.password.length > 0 &&
+                    info.confirmPassword.length > 0) {
+                    resolve();
+                    navigation.navigate('SignUpP2', {info: info});
+                }
+            }
+            reject();
+        });
+    };
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -39,30 +49,39 @@ const SignUpP1 = ({navigation}) => {
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
-                            <Text style={[MainStyles.bodyText, {color: 'red', fontSize: 15}]}>
-                                {errorMsg}
-                            </Text>
-                            <NormalTextInput
-                                placeholder={'Student ID'}
-                                onChangeText={(text) => setInfo({...info, studentID: text})}
-                                value={info.studentID}
-                            />
                             <NormalTextInput
                                 placeholder={'Email'}
+                                errorRule={[
+                                    {
+                                        pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                        message: 'Incorrect Email Format'
+                                    },
+                                ]}
                                 onChangeText={(text) => setInfo({...info, email: text})}
                                 value={info.email}
+                                errorStatus={errorState.email}
                             />
                             <NormalTextInput
                                 placeholder={'Password'}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Password Can\'t Be Empty'},
+                                    {pattern: new RegExp(info.confirmPassword, 'g'), message: 'Password Did Not Match'},
+                                ]}
                                 onChangeText={(text) => setInfo({...info, password: text})}
                                 value={info.password}
                                 secureTextEntry={true}
+                                errorStatus={errorState.password}
                             />
                             <NormalTextInput
                                 placeholder={'Confirm Password'}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Confirm Password Can\'t Be Empty'},
+                                    {pattern: new RegExp(info.password, 'g'), message: 'Password Did Not Match'},
+                                ]}
                                 onChangeText={(text) => setInfo({...info, confirmPassword: text})}
                                 value={info.confirmPassword}
                                 secureTextEntry={true}
+                                errorStatus={errorState.confirmPassword}
                             />
                             <TransparentButton text={'Next'} onPress={handleButtonPress}/>
                         </View>

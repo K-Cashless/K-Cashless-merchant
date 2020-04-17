@@ -10,30 +10,36 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
     async function signIn(userName, password) {
-        try {
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(userName, password)
-                .then(res => {
-                    console.log(res.user.email);
-                    setIsLoading(false);
-                    setButtonStyle(styles.buttonContainer);
-                })
-                .then(() => {
-                    // TODO-WIP pulling data from firebase
-                    store.dispatch(actions.User.setId('61010000'));
-                    store.dispatch(actions.User.setName('Mickey Mouse'));
-                    store.dispatch(actions.User.setBalance(100));
-                    store.dispatch(actions.User.setKpoints(100));
-                    store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-                    navigation.navigate('App');
-                });
-        } catch (error) {
-            console.log(error.toString());
-            setErrorMsg(error.message);
-            setIsLoading(false);
-            setButtonStyle(styles.buttonContainer);
-        }
+        // try {
+        //     await firebase
+        //         .auth()
+        //         .signInWithEmailAndPassword(userName, password)
+        //         .then(res => {
+        //             console.log(res.user.email);
+        //             setIsLoading(false);
+        //             setButtonStyle(styles.buttonContainer);
+        //         })
+        //         .then(() => {
+        //             // TODO-WIP pulling data from firebase
+        //             store.dispatch(actions.User.setId('61010000'));
+        //             store.dispatch(actions.User.setName('Mickey Mouse'));
+        //             store.dispatch(actions.User.setBalance(100));
+        //             store.dispatch(actions.User.setKpoints(100));
+        //             store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+        //             navigation.navigate('App');
+        //         });
+        // } catch (error) {
+        //     console.log(error.toString());
+        //     setErrorMsg(error.message);
+        //     setIsLoading(false);
+        //     setButtonStyle(styles.buttonContainer);
+        // }
+        store.dispatch(actions.User.setId('61010000'));
+        store.dispatch(actions.User.setName('Mickey Mouse'));
+        store.dispatch(actions.User.setBalance(100));
+        store.dispatch(actions.User.setKpoints(100));
+        store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
+        navigation.navigate('App');
     }
 
     const onPressAction = () => {
