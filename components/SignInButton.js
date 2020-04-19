@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import * as firebase from 'firebase';
 import {BallIndicator} from "react-native-indicators";
 import * as actions from '../actions';
 import store from '../store';
 
-const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
+const SignInButton = ({navigation, userName, password}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
@@ -35,7 +34,8 @@ const SignInButton = ({navigation, userName, password, setErrorMsg}) => {
         //     setButtonStyle(styles.buttonContainer);
         // }
         store.dispatch(actions.User.setId('61010000'));
-        store.dispatch(actions.User.setName('Mickey Mouse'));
+        store.dispatch(actions.User.setFirstName('Mickey'));
+        store.dispatch(actions.User.setLastName('Mouse'));
         store.dispatch(actions.User.setBalance(100));
         store.dispatch(actions.User.setKpoints(100));
         store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));

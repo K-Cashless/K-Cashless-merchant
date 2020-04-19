@@ -3,6 +3,8 @@ import * as actionType from '../constants/action-const';
 export const User = {
     setId: (id) => ({type: actionType.SET_USER_ID, payload: id}),
     setPic: (uri) => ({type: actionType.SET_USER_PIC, payload: uri}),
+    setFirstName: (firstName) => ({type: actionType.SET_USER_FIRST_NAME, payload: firstName}),
+    setLastName: (lastName) => ({type: actionType.SET_USER_LAST_NAME, payload: lastName}),
     setName: (name) => ({type: actionType.SET_USER_NAME, payload: name}),
     setBalance: (balance) => ({type: actionType.SET_USER_BALANCE, payload: balance}),
     setKpoints: (kpoints) => ({type: actionType.SET_USER_KPOINTS, payload: kpoints}),

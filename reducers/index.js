@@ -4,7 +4,9 @@ export const initialState = {
     User: {
         id: null,
         pic: null,
-        name: null,
+        firstName: null,
+        lastName: null,
+        name: '(initialState.name)FIX IT IF YOU SEE THIS MESSAGE!!!!',
         balance: 0,
         kpoints: 0,
         notifications: {
@@ -33,6 +35,23 @@ const reducer = (state = initialState, action) => {
                     pic: action.payload
                 }
             };
+        case actionType.SET_USER_FIRST_NAME:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    firstName: action.payload
+                }
+            };
+        case actionType.SET_USER_LAST_NAME:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    lastName: action.payload
+                }
+            };
+
         case actionType.SET_USER_NAME:
             return {
                 ...state,
@@ -41,6 +60,7 @@ const reducer = (state = initialState, action) => {
                     name: action.payload
                 }
             };
+
         case actionType.SET_USER_BALANCE:
             return {
                 ...state,

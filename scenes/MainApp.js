@@ -1,17 +1,57 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {HomeHeader, KPointRect, PromotionHeader, QuickActionsGrid, ScanButton} from '../components';
-import LibraryHeader from '../components/LibraryHeader';
-import MInfoSection from '../components/MInfoSection';
-import QRCode from 'react-native-qrcode-svg';
+import {HomeHeader, QuickActionsGrid} from '../components';
 import * as colors from '../styles/Colors';
 import store from '../store';
 import RedDot from '../components/RedDot';
-import PromotionsList from '../components/PromotionsList';
+
+
+const AccountSummary = ({User}) => {
+    return (
+        <View style={{
+            backgroundColor: colors.primary,
+            width: '100%',
+            height: 150,
+            borderRadius: 5
+        }}>
+            <View style={{
+                padding: 20,
+                borderRadius: 5,
+                justifyContent: 'center',
+                flexDirection: 'row',
+            }}>
+                <View style={{flex: 3, height: 110, justifyContent: 'flex-start'}}>
+                    {/*Sample Data*/}
+                    <Text style={{
+                        fontFamily: 'proxima-bold',
+                        fontSize: 25,
+                        fontWeight: 'bold',
+                        color: 'white',
+                    }}>SHOP NAME</Text>
+                    <Text style={{
+                        fontFamily: 'proxima-regular',
+                        fontSize: 18,
+                        color: 'white',
+                    }}>{User.firstName} {User.lastName}</Text>
+                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+                        <Text style={{
+                            fontFamily: 'proxima-bold',
+                            fontSize: 25,
+                            fontWeight: 'bold',
+                            color: 'white',
+                            textAlign: 'right'
+                        }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
+                    </View>
+                </View>
+            </View>
+        </View>
+
+    )
+};
 
 const HomeScreen = ({navigation}) => {
     return (
@@ -26,7 +66,7 @@ const HomeScreen = ({navigation}) => {
 
             {/*K Point Balance*/}
             <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <KPointRect navigation={navigation} redeemButton={true}/>
+                <AccountSummary User={store.getState().User}/>
             </View>
 
             {/*Quick Actions*/}
@@ -37,55 +77,6 @@ const HomeScreen = ({navigation}) => {
     );
 };
 
-const PromotionsScreen = () => {
-    const [layout, setLayout] = useState({});
-    return (
-        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <View style={{top: '5%'}}>
-                <View style={{marginHorizontal: 20}}>
-                    <PromotionHeader setLayout={setLayout}/>
-                </View>
-                <View style={{marginTop: 10}}>
-                    <PromotionsList topBarLayout={layout}/>
-                </View>
-            </View>
-        </View>
-    );
-};
-
-const LibraryScreen = () => {
-    return (
-        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <View style={{
-                marginHorizontal: 20,
-                top: '5%',
-            }}>
-                <LibraryHeader/>
-            </View>
-            <View style={{
-                position: 'absolute',
-                marginHorizontal: 20,
-                height: '100%',
-                alignSelf: 'center',
-                justifyContent: 'center'
-            }}>
-                <MInfoSection title={'STUDENT ID'} value={store.getState().User.id}/>
-                <View style={{
-                    alignSelf: 'center',
-                    marginTop: 30,
-                    height: 300,
-                    width: 300,
-                    backgroundColor: 'white',
-                    borderRadius: 5,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <QRCode value={store.getState().User.id} size={250}/>
-                </View>
-            </View>
-        </View>
-    );
-};
 const MoreScreen = () => {
     return (
         <View style={MainStyles.container}>
@@ -110,23 +101,10 @@ const MainApp = createBottomTabNavigator(
                 },
             })
         },
-        Promotions: {
-            screen: PromotionsScreen,
-            navigationOptions: () => ({
-                tabBarIcon: ({focused, tintColor}) => <Icon name='tags' size={25} color={tintColor}/>,
-            })
-        },
         Scan: {
             screen: () => null,
             navigationOptions: () => ({
-                tabBarIcon: <ScanButton/>,
-                tabBarLabel: () => null
-            })
-        },
-        Library: {
-            screen: LibraryScreen,
-            navigationOptions: () => ({
-                tabBarIcon: ({focused, tintColor}) => <Icon name='book-reader' size={25} color={tintColor}/>,
+                tabBarIcon: ({focused, tintColor}) => <Icon name='qrcode' size={25} color={tintColor}/>
             })
         },
         More: {
