@@ -9,6 +9,9 @@ import * as colors from '../styles/Colors';
 import store from '../store';
 import RedDot from '../components/RedDot';
 import AccountQuickSum from '../components/AccountQuickSum';
+import SubScreenHeader from "../components/SubScreenHeader";
+import QRCode from 'react-native-qrcode-svg';
+import MInfoSection from "../components/MInfoSection";
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -59,6 +62,41 @@ const HomeScreen = ({navigation}) => {
     );
 };
 
+const MyQRScreen = () => {
+    return (
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <View style={{
+                top: '5%',
+                marginHorizontal: 20,
+            }}>
+                <SubScreenHeader title={"My QR"} backButton={false}/>
+                <View style={{
+                    marginTop: 30,
+                    width: '100%',
+                    alignSelf: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <MInfoSection title={'SHOP NAME'} value={store.getState().User.shopName}/>
+                    <View style={{height: 20}}/>
+                    <MInfoSection title={'MERCHANT ID'} value={store.getState().User.id}/>
+                    <View style={{
+                        alignSelf: 'center',
+                        marginTop: 50,
+                        height: 300,
+                        width: 300,
+                        backgroundColor: 'white',
+                        borderRadius: 5,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <QRCode value={store.getState().User.id} size={250}/>
+                    </View>
+                </View>
+            </View>
+        </View>
+    )
+};
+
 const MoreScreen = () => {
     return (
         <View style={MainStyles.container}>
@@ -83,8 +121,8 @@ const MainApp = createBottomTabNavigator(
                 },
             })
         },
-        Scan: {
-            screen: () => null,
+        MyQR: {
+            screen: MyQRScreen,
             navigationOptions: () => ({
                 tabBarIcon: ({focused, tintColor}) => <Icon name='qrcode' size={25} color={tintColor}/>
             })
