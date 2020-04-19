@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -8,70 +8,52 @@ import {HomeHeader, QuickActionsGrid} from '../components';
 import * as colors from '../styles/Colors';
 import store from '../store';
 import RedDot from '../components/RedDot';
-
-
-const AccountSummary = ({User}) => {
-    return (
-        <View style={{
-            backgroundColor: colors.primary,
-            width: '100%',
-            height: 150,
-            borderRadius: 5
-        }}>
-            <View style={{
-                padding: 20,
-                borderRadius: 5,
-                justifyContent: 'center',
-                flexDirection: 'row',
-            }}>
-                <View style={{flex: 3, height: 110, justifyContent: 'flex-start'}}>
-                    {/*Sample Data*/}
-                    <Text style={{
-                        fontFamily: 'proxima-bold',
-                        fontSize: 25,
-                        fontWeight: 'bold',
-                        color: 'white',
-                    }}>SHOP NAME</Text>
-                    <Text style={{
-                        fontFamily: 'proxima-regular',
-                        fontSize: 18,
-                        color: 'white',
-                    }}>{User.firstName} {User.lastName}</Text>
-                    <View style={{flex: 1, justifyContent: 'flex-end'}}>
-                        <Text style={{
-                            fontFamily: 'proxima-bold',
-                            fontSize: 25,
-                            fontWeight: 'bold',
-                            color: 'white',
-                            textAlign: 'right'
-                        }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
-                    </View>
-                </View>
-            </View>
-        </View>
-
-    )
-};
+import AccountQuickSum from '../components/AccountQuickSum';
 
 const HomeScreen = ({navigation}) => {
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = () => {
+
+    };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            {/*Header*/}
+
             <View style={{
-                marginHorizontal: 20,
                 top: '5%'
             }}>
-                <HomeHeader navigation={navigation}/>
-            </View>
+                <View style={{marginHorizontal: 20}}>
+                    <HomeHeader navigation={navigation}/>
+                </View>
+                {/*Header*/}
 
-            {/*K Point Balance*/}
-            <View style={{marginHorizontal: 20, marginTop: '13%'}}>
-                <AccountSummary User={store.getState().User}/>
-            </View>
-
-            {/*Quick Actions*/}
-            <View style={{marginHorizontal: 20, top: '5%'}}>
-                <QuickActionsGrid navigation={navigation}/>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={
+                        <RefreshControl
+                            tintColor='white'
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
+                >
+                    {/*K Point Balance*/}
+                    <View style={{marginTop: 20, marginHorizontal: 20}}>
+                        <AccountQuickSum User={store.getState().User}/>
+                    </View>
+                    <View style={{marginTop: 20, marginHorizontal: 20, height: 100}}>
+                        <Text style={{
+                            fontFamily: 'proxima-bold',
+                            fontSize: 18,
+                            fontWeight: 'bold',
+                            color: 'white',
+                        }}>Recent Activity</Text>
+                    </View>
+                    {/*Quick Actions*/}
+                    <View style={{flex: 1, marginHorizontal: 20}}>
+                        <QuickActionsGrid navigation={navigation}/>
+                    </View>
+                    <View style={{height: 200}}/>
+                </ScrollView>
             </View>
         </View>
     );

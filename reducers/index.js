@@ -4,6 +4,7 @@ export const initialState = {
     User: {
         id: null,
         pic: null,
+        shopName: null,
         firstName: null,
         lastName: null,
         name: '(initialState.name)FIX IT IF YOU SEE THIS MESSAGE!!!!',
@@ -33,6 +34,14 @@ const reducer = (state = initialState, action) => {
                 User: {
                     ...state.User,
                     pic: action.payload
+                }
+            };
+        case actionType.SET_USER_SHOP_NAME:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    shopName: action.payload
                 }
             };
         case actionType.SET_USER_FIRST_NAME:

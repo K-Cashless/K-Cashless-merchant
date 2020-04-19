@@ -6,7 +6,7 @@ const QuickActionsGrid = ({navigation}) => {
     return (
         <View style={{
             width: '100%',
-            height: '70%',
+            height: 200,
         }}>
             {/*ROW 1*/}
             <View style={style.gridRowContainer}>
@@ -43,7 +43,9 @@ const GridButton = ({iconName, text, onPress}) => {
 const style = StyleSheet.create({
     gridButton: {
         flex: 1,
+        margin: 10,
         justifyContent: 'center',
+
     },
     iconContainer: {
         flex: 3,

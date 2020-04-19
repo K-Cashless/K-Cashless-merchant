@@ -34,6 +34,7 @@ const SignInButton = ({navigation, userName, password}) => {
         //     setButtonStyle(styles.buttonContainer);
         // }
         store.dispatch(actions.User.setId('61010000'));
+        store.dispatch(actions.User.setShopName('Disney Store'));
         store.dispatch(actions.User.setFirstName('Mickey'));
         store.dispatch(actions.User.setLastName('Mouse'));
         store.dispatch(actions.User.setBalance(100));
