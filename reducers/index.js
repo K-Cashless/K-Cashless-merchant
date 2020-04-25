@@ -61,15 +61,6 @@ const reducer = (state = initialState, action) => {
                 }
             };
 
-        case actionType.SET_USER_NAME:
-            return {
-                ...state,
-                User: {
-                    ...state.User,
-                    name: action.payload
-                }
-            };
-
         case actionType.SET_USER_BALANCE:
             return {
                 ...state,

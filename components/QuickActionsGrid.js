@@ -14,7 +14,7 @@ const QuickActionsGrid = ({navigation}) => {
                     text={'Request Money'}
                     iconName={'hand-holding-usd'}
                     onPress={() => {
-                        navigation.navigate('History')
+                        navigation.navigate('RequestMoney')
                     }}/>
                 <GridButton
                     text={'History'}
