@@ -3,9 +3,8 @@ import {Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import DoneButton from '../components/DoneButton';
-import {connect} from 'react-redux';
 
-const TopUpComplete = ({navigation, User}) => {
+const RequestMoneyComplete = ({navigation}) => {
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, height: '100%', alignItems: 'center'}}>
@@ -32,10 +31,4 @@ const TopUpComplete = ({navigation, User}) => {
     );
 };
 
-function mapStateToProps(state) {
-    return {
-        User: state.User
-    }
-}
-
-export default connect(mapStateToProps)(TopUpComplete);
+export default RequestMoneyComplete;
