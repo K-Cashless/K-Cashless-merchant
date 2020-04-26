@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {RefreshControl, ScrollView, Text, View} from 'react-native';
+import {Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -12,11 +12,12 @@ import AccountQuickSum from '../components/AccountQuickSum';
 import SubScreenHeader from "../components/SubScreenHeader";
 import QRCode from 'react-native-qrcode-svg';
 import MInfoSection from "../components/MInfoSection";
+import RecentActivity from '../components/RecentActivity';
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = () => {
-
+        setRefreshing(false);
     };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -28,7 +29,6 @@ const HomeScreen = ({navigation}) => {
                     <HomeHeader navigation={navigation}/>
                 </View>
                 {/*Header*/}
-
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     refreshControl={
@@ -44,15 +44,15 @@ const HomeScreen = ({navigation}) => {
                         <AccountQuickSum User={store.getState().User}/>
                     </View>
                     <View style={{marginTop: 20, marginHorizontal: 20, height: 100}}>
-                        <Text style={{
-                            fontFamily: 'proxima-bold',
-                            fontSize: 18,
-                            fontWeight: 'bold',
-                            color: 'white',
-                        }}>Recent Activity</Text>
+                        <RecentActivity/>
                     </View>
                     {/*Quick Actions*/}
-                    <View style={{flex: 1, marginHorizontal: 20}}>
+                    <View style={{
+                        flex: 1,
+                        marginHorizontal: 20,
+                        justifyContent: 'center',
+                        height: Dimensions.get('window').height / 4
+                    }}>
                         <QuickActionsGrid navigation={navigation}/>
                     </View>
                     <View style={{height: 200}}/>
