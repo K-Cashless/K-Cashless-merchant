@@ -17,20 +17,23 @@ const RequestMoney = ({navigation, balance}) => {
                     top: '5%',
                     height: '100%',
                 }}>
-                    <SubScreenHeader navigation={navigation} title={'Top Up'} backButton={true}/>
+                    <SubScreenHeader navigation={navigation} title={'Request Withdrawal'} backButton={true}/>
                     <View style={{paddingTop: 20, paddingBottom: 50}}>
                         <LInfoSectionTHB title={'YOUR CURRENT BALANCE IS'} value={balance}/>
                     </View>
-                    <Text style={MainStyles.bodyText}>Please enter your top up code</Text>
+                    <Text style={MainStyles.bodyText}>Please enter amount to withdraw</Text>
                     <NormalTextInput
                         onChangeText={(text) => {
                             setTopUpCode(text);
                         }}
                         value={topUpCode}
-                        placeholder={'Enter top up code'}
+                        placeholder={'Amount to Withdraw'}
                     />
-                    <BlueButton text={'Top Up'} onPress={() => {
-                        navigation.replace('TopUpComplete')
+                    <BlueButton text={'Make Request'} onPress={() => {
+                        return new Promise(resolve => {
+                            navigation.replace('RequestMoneyComplete');
+                            resolve();
+                        });
                     }} disable={topUpCode.length === 0}/>
                 </View>
             </View>

@@ -6,6 +6,7 @@ import History from '../scenes/History';
 import Profile from '../scenes/Profile';
 import ManageAccount from '../scenes/ManageAccount';
 import RequestMoney from '../scenes/RequestMoney';
+import RequestMoneyComplete from '../scenes/RequestMoneyComplete';
 
 const AppNavigator = createStackNavigator(
     {
@@ -26,6 +27,9 @@ const AppNavigator = createStackNavigator(
         },
         RequestMoney: {
             screen: RequestMoney,
+        },
+        RequestMoneyComplete: {
+            screen: RequestMoneyComplete,
         }
     },
     {
