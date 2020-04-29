@@ -39,7 +39,6 @@ const HomeScreen = ({navigation}) => {
                         />
                     }
                 >
-                    {/*K Point Balance*/}
                     <View style={{marginTop: 20, marginHorizontal: 20}}>
                         <AccountQuickSum User={store.getState().User}/>
                     </View>
