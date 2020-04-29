@@ -9,36 +9,13 @@ const SignInButton = ({navigation, userName, password}) => {
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
     async function signIn(userName, password) {
-        // try {
-        //     await firebase
-        //         .auth()
-        //         .signInWithEmailAndPassword(userName, password)
-        //         .then(res => {
-        //             console.log(res.user.email);
-        //             setIsLoading(false);
-        //             setButtonStyle(styles.buttonContainer);
-        //         })
-        //         .then(() => {
-        //             // TODO-WIP pulling data from firebase
-        //             store.dispatch(actions.User.setId('61010000'));
-        //             store.dispatch(actions.User.setName('Mickey Mouse'));
-        //             store.dispatch(actions.User.setBalance(100));
-        //             store.dispatch(actions.User.setKpoints(100));
-        //             store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-        //             navigation.navigate('App');
-        //         });
-        // } catch (error) {
-        //     console.log(error.toString());
-        //     setErrorMsg(error.message);
-        //     setIsLoading(false);
-        //     setButtonStyle(styles.buttonContainer);
-        // }
-        store.dispatch(actions.User.setId('61010000'));
+        store.dispatch(actions.User.setId('M0001'));
         store.dispatch(actions.User.setShopName('Disney Store'));
         store.dispatch(actions.User.setFirstName('Mickey'));
         store.dispatch(actions.User.setLastName('Mouse'));
-        store.dispatch(actions.User.setBalance(100));
-        store.dispatch(actions.User.setKpoints(100));
+        store.dispatch(actions.User.setBalance(10000));
+        store.dispatch(actions.User.setEmail('store@disney.com'));
+        store.dispatch(actions.User.setPhone('+012342222'));
         store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
         navigation.navigate('App');
     }
@@ -46,7 +23,7 @@ const SignInButton = ({navigation, userName, password}) => {
     const onPressAction = () => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
-        signIn(userName, password).then(null);
+        signIn(userName, password).then(setIsLoading(false));
     };
 
     return (

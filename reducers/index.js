@@ -3,19 +3,20 @@ import * as actionType from '../constants/action-const';
 export const initialState = {
     User: {
         id: null,
-        pic: null,
+        email: null,
+        token: null,
         shopName: null,
+        pic: null,
         firstName: null,
         lastName: null,
-        name: '(initialState.name)FIX IT IF YOU SEE THIS MESSAGE!!!!',
         balance: 0,
-        kpoints: 0,
         notifications: {
             haveUnread: false,
             list: []
         },
-        history: []
-    }
+        history: [],
+        phone: null,
+    },
 };
 
 const reducer = (state = initialState, action) => {
@@ -60,7 +61,6 @@ const reducer = (state = initialState, action) => {
                     lastName: action.payload
                 }
             };
-
         case actionType.SET_USER_BALANCE:
             return {
                 ...state,
@@ -117,6 +117,35 @@ const reducer = (state = initialState, action) => {
                     ...state.User,
                     history: action.payload
                 }
+            };
+        case actionType.SET_USER_EMAIL:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    email: action.payload
+                }
+            };
+        case actionType.SET_USER_TOKEN:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    token: action.payload
+                }
+            };
+        case actionType.SET_USER_PHONE:
+            return {
+                ...state,
+                User: {
+                    ...state.User,
+                    phone: action.payload
+                }
+            };
+        case actionType.CLEAR_ALL_USER:
+            return {
+                ...state,
+                User: initialState.User
             };
         default:
             return state;

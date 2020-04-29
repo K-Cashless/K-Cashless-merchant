@@ -4,7 +4,6 @@ import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 import {connect} from 'react-redux'
 import SubScreenHeader from "../components/SubScreenHeader";
-import * as firebase from 'firebase';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const Profile = ({navigation, User}) => {
@@ -41,8 +40,12 @@ const ProfileCard = ({User}) => {
                 flexDirection: 'row',
             }}>
                 <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
-                    <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
-                           resizeMode='cover'/>
+                    {
+                        User.pic &&
+                        <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
+                               resizeMode='cover'/>
+                    }
+
                 </View>
                 <View style={{flex: 3, paddingLeft: 10, height: 110, justifyContent: 'flex-start'}}>
                     <Text style={{
@@ -69,49 +72,6 @@ const ProfileCard = ({User}) => {
             </View>
         </View>
 
-        // <View style={{
-        //     backgroundColor: colors.primary,
-        //     width: '100%',
-        //     height: 150,
-        //     borderRadius: 5
-        // }}>
-        //     <View style={{
-        //         padding: 20,
-        //         borderRadius: 5,
-        //         justifyContent: 'center',
-        //         flexDirection: 'row',
-        //     }}>
-        //         <View style={{alignItems: 'center', justifyContent: 'flex-start'}}>
-        //             <Image source={{uri: User.pic}} style={{width: 60, height: 60, borderRadius: 80}}
-        //                    resizeMode='cover'/>
-        //         </View>
-        //
-        //         <View style={{flex: 3, marginLeft: 20, height: 110, justifyContent: 'flex-start'}}>
-        //
-        //             <Text style={{
-        //                 fontFamily: 'proxima-bold',
-        //                 fontSize: 18,
-        //                 fontWeight: 'bold',
-        //                 color: 'white',
-        //             }}>{User.firstName} {User.lastName}</Text>
-        //             <Text style={{
-        //                 fontFamily: 'proxima-regular',
-        //                 fontSize: 18,
-        //                 color: 'white',
-        //             }}>090-0000000</Text>
-        //             <View style={{flex: 1, marginTop: 10}}>
-        //                 <Text style={{
-        //                     fontFamily: 'proxima-bold',
-        //                     fontSize: 25,
-        //                     fontWeight: 'bold',
-        //                     color: 'white',
-        //                     textAlign: 'right'
-        //                 }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
-        //             </View>
-        //         </View>
-        //     </View>
-        // </View>
-
     )
 };
 
@@ -137,7 +97,7 @@ const SignOutButton = ({navigation}) => {
             style={{position: 'absolute', bottom: 50, width: '100%'}}
             onPress={() => {
                 console.log('press!');
-                firebase.auth().signOut().then(() => navigation.navigate('SignIn'));
+                navigation.navigate('SignIn');
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>

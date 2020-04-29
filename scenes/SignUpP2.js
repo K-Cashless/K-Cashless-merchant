@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Alert, Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
@@ -7,34 +7,28 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import * as color from '../styles/Colors';
-import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
 
 const SignUpP2 = ({navigation}) => {
-    const [imgUri, setImgUri] = useState('');
+    const [imgUri, setImgUri] = useState(null);
     const [info, setInfo] = useState(navigation.getParam('info', {}));
-    const demoPic = require('../assets/demoPic.png');
     let errorState = {
-        firstName: useState(false),
-        lastName: useState(false),
-        phone: useState(false),
+        shopName: useState(true),
+        firstName: useState(true),
+        lastName: useState(true),
+        phone: useState(true),
     };
-    const isFieldError = () => {
-        if (errorState.firstName[0] === false &&
+    const [allowProceed, setAllowProceed] = useState(false);
+    useEffect(() => {
+        setAllowProceed(
+            errorState.firstName[0] === false &&
             errorState.lastName[0] === false &&
-            errorState.phone[0] === false) {
-            if (info.firstName.length > 0 &&
-                info.lastName.length > 0 &&
-                info.phone.length > 0) {
-                return false;
-            }
-        }
-        return true;
-    };
+            errorState.phone[0] === false
+        );
+    });
 
     const handleSignUp = () => {
         return new Promise((resolve, reject) => {
-            if (isFieldError()) reject();
             const infoToSend = {
                 email: info.email,
                 password: info.password,
@@ -45,8 +39,15 @@ const SignUpP2 = ({navigation}) => {
                 phone: info.phone
             };
             console.log(infoToSend);
-            //
-            // axios.post('https://asia-east2-k-cash-less.cloudfunctions.net/api/signup', infoToSend)
+
+            const resetAction = StackActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+            });
+            navigation.dispatch(resetAction);
+            resolve();
+
+            // axios.post(API_URL.SIGN_UP, infoToSend)
             //     .then(res => {
             //         console.log(res);
             //         const resetAction = StackActions.reset({
@@ -57,16 +58,10 @@ const SignUpP2 = ({navigation}) => {
             //         resolve();
             //     })
             //     .catch(error => {
-            //         console.log(error.response.data.handle);
-            //         Alert.alert('Error', error.response.data.handle);
+            //         console.log(error.response.data.message);
+            //         Alert.alert('Error', error.response.data.message);
             //         reject();
             //     });
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
-            });
-            navigation.dispatch(resetAction);
-            resolve();
         });
     };
 
@@ -79,14 +74,31 @@ const SignUpP2 = ({navigation}) => {
                     <KeyboardAwareScrollView>
                         <View style={{marginTop: 20}}>
                             <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <Image source={imgUri.length === 0 ? demoPic : {uri: imgUri}}
-                                       style={{width: 100, height: 100, borderRadius: 100}}
-                                       resizeMode='cover'/>
+                                <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
+                                    {
+                                        imgUri &&
+                                        <Image source={{uri: imgUri}}
+                                               style={{width: 100, height: 100, borderRadius: 100}}
+                                               resizeMode='cover'/>
+                                    }
+                                </View>
                                 <TextButton text={'Add Your Photo'} color={color.primary}
                                             onPress={() => handleImagePicking(setImgUri)}/>
                             </View>
+
+
                             <NormalTextInput
-                                placeholder={'First Name'}
+                                placeholder={'Shop Name*'}
+                                onChangeText={(text) => setInfo({...info, shopName: text})}
+                                value={info.shopName}
+                                errorStatus={errorState.shopName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Shop Name Must Not Be Empty'},
+                                ]}
+                            />
+
+                            <NormalTextInput
+                                placeholder={'First Name*'}
                                 onChangeText={(text) => setInfo({...info, firstName: text})}
                                 value={info.firstName}
                                 errorStatus={errorState.firstName}
@@ -94,8 +106,9 @@ const SignUpP2 = ({navigation}) => {
                                     {pattern: /.+/, message: 'First Name Must Not Be Empty'},
                                 ]}
                             />
+
                             <NormalTextInput
-                                placeholder={'Last Name'}
+                                placeholder={'Last Name*'}
                                 onChangeText={(text) => setInfo({...info, lastName: text})}
                                 value={info.lastName}
                                 errorStatus={errorState.lastName}
@@ -104,17 +117,22 @@ const SignUpP2 = ({navigation}) => {
                                 ]}
                             />
                             <NormalTextInput
-                                placeholder={'Phone'}
+                                placeholder={'Phone*'}
                                 onChangeText={(text) => setInfo({...info, phone: text})}
                                 value={info.phone}
                                 errorStatus={errorState.phone}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                                    {pattern: /^\d+$/, message: 'Phone Number Must Contains Numbers Only'},
                                 ]}
                             />
                         </View>
-                        <TransparentButton text={'Sign Up'} onPress={handleSignUp}
-                                           style={{backgroundColor: 'rgb(38,115,226)'}}/>
+                        <TransparentButton
+                            text={'Sign Up'}
+                            disabled={!allowProceed}
+                            onPress={handleSignUp}
+                            style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
+                        />
                     </KeyboardAwareScrollView>
                 </View>
             </View>

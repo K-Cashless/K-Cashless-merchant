@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import TransparentButton from "../components/TransparentButton";
 
 
@@ -12,45 +12,46 @@ const SignUpP1 = ({navigation}) => {
         email: '',
         password: '',
         confirmPassword: '',
+        shopName: '',
         firstName: '',
         lastName: '',
         phone: ''
     });
+    const [allowProceed, setAllowProceed] = useState(false);
 
     let errorState = {
-        email: useState(false),
-        password: useState(false),
-        confirmPassword: useState(false),
+        email: useState(true),
+        password: useState(true),
+        confirmPassword: useState(true),
     };
 
+    useEffect(() => {
+        setAllowProceed(
+            errorState.email[0] === false &&
+            errorState.password[0] === false &&
+            errorState.confirmPassword[0] === false
+        );
+    });
+
     const handleButtonPress = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             Keyboard.dismiss;
-            if (errorState.email[0] === false &&
-                errorState.password[0] === false &&
-                errorState.confirmPassword[0] === false) {
-                if (info.email.length > 0 &&
-                    info.password.length > 0 &&
-                    info.confirmPassword.length > 0) {
-                    resolve();
-                    navigation.navigate('SignUpP2', {info: info});
-                }
-            }
-            reject();
+            navigation.navigate('SignUpP2', {info: info});
+            resolve();
         });
     };
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
+                <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start', height: '75%'}}>
                     <KeyboardAwareScrollView>
+                        <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
                                 information</Text>
                             <NormalTextInput
-                                placeholder={'Email'}
+                                placeholder={'Email*'}
                                 errorRule={[
                                     {
                                         pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -62,9 +63,10 @@ const SignUpP1 = ({navigation}) => {
                                 errorStatus={errorState.email}
                             />
                             <NormalTextInput
-                                placeholder={'Password'}
+                                placeholder={'Password*'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Password Can\'t Be Empty'},
+                                    {pattern: /.{6,}/, message: 'Password must be at least 6 characters long'},
                                     {pattern: new RegExp(info.confirmPassword, 'g'), message: 'Password Did Not Match'},
                                 ]}
                                 onChangeText={(text) => setInfo({...info, password: text})}
@@ -73,7 +75,7 @@ const SignUpP1 = ({navigation}) => {
                                 errorStatus={errorState.password}
                             />
                             <NormalTextInput
-                                placeholder={'Confirm Password'}
+                                placeholder={'Confirm Password*'}
                                 errorRule={[
                                     {pattern: /.+/, message: 'Confirm Password Can\'t Be Empty'},
                                     {pattern: new RegExp(info.password, 'g'), message: 'Password Did Not Match'},
@@ -83,7 +85,12 @@ const SignUpP1 = ({navigation}) => {
                                 secureTextEntry={true}
                                 errorStatus={errorState.confirmPassword}
                             />
-                            <TransparentButton text={'Next'} onPress={handleButtonPress}/>
+                            <TransparentButton
+                                text={'Next'}
+                                disabled={!allowProceed}
+                                style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
+                                onPress={handleButtonPress}
+                            />
                         </View>
                     </KeyboardAwareScrollView>
                 </View>

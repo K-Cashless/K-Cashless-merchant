@@ -1,100 +1,286 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
+import RBSheet from "react-native-raw-bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
-import {
-    Image,
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
 import {connect} from 'react-redux';
 import * as color from '../styles/Colors';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {BallIndicator} from "react-native-indicators";
 import NormalTextInput from "../components/NormalTextInput";
-import store from '../store';
-import * as actions from '../actions';
+import TransparentButton from "../components/TransparentButton";
+
 
 const ManageAccount = ({navigation, User}) => {
+    const refRBSheet = useRef();
+    const [showLoading, setShowLoading] = useState(false);
+    const [editedField, setEditedField] = useState(null);
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-            <KeyboardAvoidingView
-                behavior={Platform.Os === "ios" ? "padding" : "height"}
-                style={{flex: 1}}
-            >
-                <TouchableWithoutFeedback
-                    onPress={() => {
-                        Keyboard.dismiss();
-                    }}>
-                    <View style={{marginHorizontal: 20, top: 0, justifyContent: 'flex-end'}}>
-                        <View style={{marginTop: '10%', width: '100%'}}>
+            <KeyboardAwareScrollView>
+                <View style={{marginHorizontal: 20, top: 0, justifyContent: 'flex-end'}}>
+                    <View style={{marginTop: '10%', width: '100%'}}>
+                        <View style={{flexDirection: 'row'}}>
                             <SubScreenHeader navigation={navigation} title={'Manage Account'} backButton={true}/>
-
-                            <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <Image source={{uri: User.pic}}
-                                       style={{width: 100, height: 100, borderRadius: 100}}
-                                       resizeMode='cover'/>
-                                <TextButton text={'EDIT'} color={color.primary} onPress={() => handleImagePicking()}/>
-                            </View>
-
-                            <View style={{flexDirection: 'row', marginTop: 20}}>
-                                <MInfoSection title={'STUDENT ID'} value={User.id + ''}/>
-                            </View>
-                            <UserInfo title={'NAME'} value={User.name + ''}/>
-                            <UserInfo title={'PHONE'} value={User.phone + ''}/>
-
+                            {
+                                showLoading ? (
+                                    <View style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
+                                        <BallIndicator size={20} color={'white'}/>
+                                    </View>
+                                ) : null
+                            }
                         </View>
+
+
+                        <View style={{marginTop: 20, alignItems: 'center'}}>
+                            <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
+                                {
+                                    User.pic &&
+                                    <Image source={{uri: User.pic}}
+                                           style={{width: 100, height: 100, borderRadius: 100}}
+                                           resizeMode='cover'/>
+                                }
+                            </View>
+
+                            <View style={{margin: 20}}>
+                                <TextButton text={'Edit'} color={color.primary}
+                                            onPress={() => handleImagePicking(User.token, setShowLoading)}/>
+                            </View>
+                        </View>
+
+
+                        <UserInfo title={'Merchant ID'} value={User.id} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField} editable={false}/>
+                        <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
+                        <UserInfo title={'Phone'} value={User.phone} refRBSheet={refRBSheet}
+                                  setEditedField={setEditedField}/>
                     </View>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
+                </View>
+            </KeyboardAwareScrollView>
+            <RBSheet
+                ref={refRBSheet}
+                animationType={'fade'}
+                duration={200}
+                height={250}
+                closeOnDragDown={true}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: 'rgba(0,0,0,0.5)'
+                    },
+                    container: {
+                        backgroundColor: color.background,
+                    },
+                    draggableIcon: {
+                        backgroundColor: 'white'
+                    }
+                }}
+            >
+                {/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>*/}
+                <EditingSheet editedField={editedField} refRBSheet={refRBSheet}/>
+                {/*</TouchableWithoutFeedback>*/}
+            </RBSheet>
         </View>
     )
 };
 
-const UserInfo = ({title, value, onFinishEditing}) => {
-    const [edit, setEdit] = useState(false);
+const EditingSheet = ({editedField, refRBSheet}) => {
+    const [field, setField] = useState('');
+    const errorState = useState(true);
 
+    switch (editedField) {
+        case 'Email':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Email</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your new email*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {
+                                pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                message: 'Incorrect Email Format'
+                            },
+                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th/, message: 'KMITL Email Only'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                                return new Promise((resolve, reject) => {
+                                    // const infoToSend = {email: field};
+                                    // axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
+                                    //     'headers': {
+                                    //         'Authorization': 'Bearer ' + store.getState().User.token
+                                    //     }
+                                    // })
+                                    //     .then(() => {
+                                    //         store.dispatch(actions.User.setEmail(field));
+                                    //         resolve();
+                                    //     })
+                                    //     .catch(error => {
+                                    //         console.log(error.response);
+                                    //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                                    //         reject();
+                                    //     })
+                                });
+                            }}
+                        />
+                    </View>
+                </View>
+            );
+        case 'First Name':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your first name*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'First Name Must Not Be Empty'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
+                </View>
+            );
+        case 'Last Name':
+            return (
+
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Last Name</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your last name*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
+                </View>
+            );
+        case 'Phone':
+            return (
+                <View style={{marginHorizontal: 20}}>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Phone</Text>
+                    <NormalTextInput
+                        placeholder={'Enter your new phone number*'}
+                        onChangeText={(text) => setField(text)}
+                        value={field}
+                        errorStatus={errorState}
+                        errorRule={[
+                            {pattern: /.+/, message: 'Phone Number Must Not Be Empty'},
+                            {pattern: /^\d+$/, message: 'Phone Number Must Contains Numbers Only'},
+                        ]}
+                    />
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+                            <Text style={[MainStyles.bodyText, {
+                                fontFamily: 'proxima-bold',
+                                color: 'red',
+                                marginTop: 20,
+                                right: 25
+                            }]}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TransparentButton
+                            text={'Done'}
+                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
+                            onPress={() => {
+                            }}
+                        />
+                    </View>
+                </View>
+            );
+        default:
+            return null;
+    }
+};
+
+const UserInfo = ({title, value, setEditedField, refRBSheet, editable = true}) => {
     return (
-        <View>
-            <View style={{flexDirection: 'row', marginTop: 20}}>
-                <View style={{flex: 2}}>
+        <View style={{marginBottom: 10}}>
+            <View style={{flexDirection: 'row', marginTop: 5}}>
+                <View style={{flex: 1}}>
                     <MInfoSection title={title} value={value}/>
                 </View>
-                <View style={{flexWrap: 'wrap'}}>
-                    <TextButton
-                        text={edit ? 'CANCEL' : 'EDIT'}
-                        color={edit ? 'red' : color.primary}
-                        onPress={() => {
-                            setEdit(!edit);
-                        }}/>
+                <View style={{justifyContent: 'center'}}>
+                    {
+                        editable ?
+                            <TextButton
+                                text='Edit'
+                                color={color.primary}
+                                onPress={() => {
+                                    setEditedField(title);
+                                    refRBSheet.current.open();
+                                }}/> : null
+                    }
+
                 </View>
             </View>
-            {
-                edit ? (
-                    <View style={{flexDirection: 'row'}}>
-                        <View style={{flex: 1}}>
-                            <NormalTextInput/>
-                        </View>
-                        <TextButton text={'DONE'} color={color.primary} onPress={() => setEdit(false)}/>
-                    </View>
-                ) : null}
         </View>
     )
 };
 
 const TextButton = ({text, color, onPress}) => {
     return (
-        <TouchableOpacity style={{margin: 20}} onPress={onPress}>
-            <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
+        <TouchableOpacity style={{}} onPress={onPress}>
+            <Text style={[MainStyles.head2Text, {fontSize: 16, color: color}]}>{text}</Text>
         </TouchableOpacity>
     )
 };
 
-const handleImagePicking = async () => {
+const handleImagePicking = async (token, setShowLoading) => {
     let permission = await ImagePicker.requestCameraRollPermissionsAsync();
     if (permission.status === 'granted') {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -104,8 +290,26 @@ const handleImagePicking = async () => {
             quality: 1
         });
         if (result.cancelled === false) {
-            // TODO - update data with database
-            store.dispatch(actions.User.setPic(result.uri));
+            let infoToSend = new FormData();
+            infoToSend.append('image', {
+                uri: result.uri,
+                name: 'userProfile.jpg',
+                type: 'image/jpg'
+            });
+            console.log("uploading: ", result);
+            // setShowLoading(true);
+            // axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
+            //     'headers': {
+            //         'Content-Type': 'multipart/form-data',
+            //         'Authorization': 'Bearer ' + token
+            //     }
+            // })
+            //     .then(res => {
+            //         setShowLoading(false);
+            //         console.log(res);
+            //         store.dispatch(actions.User.setPic(result.uri));
+            //     })
+            //     .catch(error => console.log(error));
         }
     }
 };

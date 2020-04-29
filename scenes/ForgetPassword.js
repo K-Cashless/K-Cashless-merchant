@@ -1,30 +1,23 @@
-import React, {useState} from 'react';
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    Text,
-    TouchableHighlight,
-    TouchableWithoutFeedback,
-    View
-} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BallIndicator} from "react-native-indicators";
+import TransparentButton from "../components/TransparentButton";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 const ForgetPassword = ({navigation}) => {
     const [email, setEmail] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const errorState = useState(true);
+    const [allowProceed, setAllowProceed] = useState(false);
+    useEffect(() => {
+        setAllowProceed(!errorState[0]);
+    });
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <KeyboardAvoidingView
-                    behavior={Platform.Os === "ios" ? "padding" : "height"}
-                    style={{flex: 1}}
-                >
-                    <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
+                <View style={{marginHorizontal: 20, top: '5%', height: '100%', justifyContent: 'flex-start'}}>
+                    <KeyboardAwareScrollView>
                         <SubScreenHeader title={'Forget Password'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please enter your email</Text>
@@ -32,48 +25,38 @@ const ForgetPassword = ({navigation}) => {
                                 placeholder={'Enter your email'}
                                 onChangeText={(text) => setEmail(text)}
                                 value={email}
-                                style={{marginBottom: 20}}
+                                style={{marginBottom: 5}}
+                                errorRule={[{
+                                    pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: 'Incorrect Email Format'
+                                }]}
+                                errorStatus={errorState}
                             />
-                            <View style={{alignItems: 'flex-end'}}>
-                                <TouchableHighlight
-                                    underlayColor='rgba(150,150,150,0.5)'
+                            <View style={{marginTop: 10, alignItems: 'flex-end'}}>
+                                <TransparentButton
+                                    style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
+                                    text={'Next'}
+                                    disabled={!allowProceed}
                                     onPress={() => {
-                                        setIsLoading(false);
-                                        navigation.replace('ForgetPasswordComplete');
+                                        return new Promise((resolve, reject) => {
+                                            // axios.post(API_URL.FORGET_PASSWORD, {email: email})
+                                            //     .then(() => {
+                                            //         navigation.replace('ForgetPasswordComplete', {email: email});
+                                            //         resolve();
+                                            //     })
+                                            //     .catch(error => {
+                                            //         console.log(error.response);
+                                            //         Alert.alert('Error', error.response.data);
+                                            //         reject();
+                                            //     })
+                                            resolve();
+                                        })
                                     }}
-                                    style={{
-                                        width: 100,
-                                        height: 40,
-                                        borderRadius: 80,
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                >
-                                    {
-                                        isLoading ? (
-                                            <BallIndicator color={'white'} size={20}/>
-                                        ) : (
-                                            <View style={{
-                                                flexDirection: 'row',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}>
-                                                <Text style={{
-                                                    fontFamily: 'proxima-bold',
-                                                    fontSize: 20,
-                                                    color: 'white'
-                                                }}>Next</Text>
-                                                <Icon name={'chevron-right'} size={20} color={'white'}
-                                                      style={{marginLeft: 7}}/>
-                                            </View>
-                                        )
-                                    }
-                                </TouchableHighlight>
+                                />
                             </View>
                         </View>
-                        <View style={{flex: 1}}/>
-                    </View>
-                </KeyboardAvoidingView>
+                    </KeyboardAwareScrollView>
+                </View>
             </View>
         </TouchableWithoutFeedback>
     )
