@@ -42,10 +42,10 @@ const SignUpP1 = ({navigation}) => {
     };
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start', height: '75%'}}>
-                    <KeyboardAwareScrollView>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAwareScrollView>
+                    <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <Text style={[MainStyles.bodyText, {marginBottom: 20}]}>Please provide your
@@ -92,10 +92,10 @@ const SignUpP1 = ({navigation}) => {
                                 onPress={handleButtonPress}
                             />
                         </View>
-                    </KeyboardAwareScrollView>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+                    </View>
+                </KeyboardAwareScrollView>
+            </TouchableWithoutFeedback>
+        </View>
     )
 };
 

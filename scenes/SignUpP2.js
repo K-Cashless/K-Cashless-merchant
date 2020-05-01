@@ -28,12 +28,12 @@ const SignUpP2 = ({navigation}) => {
     });
 
     const handleSignUp = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
+            // TODO
             const infoToSend = {
                 email: info.email,
                 password: info.password,
                 confirmPassword: info.confirmPassword,
-                handle: info.studentID,
                 firstName: info.firstName,
                 lastName: info.lastName,
                 phone: info.phone
@@ -67,11 +67,11 @@ const SignUpP2 = ({navigation}) => {
 
 
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
-                <View style={{marginHorizontal: 20, top: '5%', justifyContent: 'flex-end'}}>
-                    <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
-                    <KeyboardAwareScrollView>
+        <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <KeyboardAwareScrollView>
+                    <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
+                        <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <View style={{marginTop: 20, alignItems: 'center'}}>
                                 <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
@@ -133,10 +133,10 @@ const SignUpP2 = ({navigation}) => {
                             onPress={handleSignUp}
                             style={{backgroundColor: allowProceed ? 'rgb(38,115,226)' : 'rgb(150,150,150)'}}
                         />
-                    </KeyboardAwareScrollView>
-                </View>
-            </View>
-        </TouchableWithoutFeedback>
+                    </View>
+                </KeyboardAwareScrollView>
+            </TouchableWithoutFeedback>
+        </View>
     )
 };
 
