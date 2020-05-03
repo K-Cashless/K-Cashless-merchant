@@ -1,25 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import axios from 'axios';
 import TransparentButton from "../components/TransparentButton";
-// import API_URL from '../firebase/apiLinks';
+import API_URL from '../firebase/apiLinks';
+
 
 const SignUpP2 = ({navigation}) => {
     const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     let errorState = {
-        shopName: useState(true),
+        storeName: useState(true),
         ownerName: useState(true),
         phone: useState(true),
     };
     const [allowProceed, setAllowProceed] = useState(false);
     useEffect(() => {
         setAllowProceed(
-            errorState.shopName[0] === false &&
+            errorState.storeName[0] === false &&
             errorState.ownerName[0] === false &&
             errorState.phone[0] === false
         );
@@ -31,27 +34,28 @@ const SignUpP2 = ({navigation}) => {
                 email: info.email,
                 password: info.password,
                 confirmPassword: info.confirmPassword,
-                shopName: info.shopName,
+                handle: "0015",
+                storeName: info.storeName,
                 ownerName: info.ownerName,
-                phone: info.phone
+                phone: info.phone,
             };
             console.log(infoToSend);
 
-            // axios.post(API_URL.SIGN_UP, infoToSend)
-            //     .then(res => {
-            //         console.log(res);
-            //         const resetAction = StackActions.reset({
-            //             index: 0,
-            //             actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
-            //         });
-            //         navigation.dispatch(resetAction);
-            //         resolve();
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response.data.message);
-            //         Alert.alert('Error', error.response.data.message);
-            //         reject();
-            //     });
+            axios.post(API_URL.SIGN_UP, infoToSend)
+                .then(res => {
+                    console.log(res);
+                    const resetAction = StackActions.reset({
+                        index: 0,
+                        actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
+                    });
+                    navigation.dispatch(resetAction);
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error', 'Please Try Again');
+                    reject();
+                });
         });
     };
 
@@ -64,12 +68,12 @@ const SignUpP2 = ({navigation}) => {
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
                             <NormalTextInput
-                                placeholder={'Shop Name*'}
-                                onChangeText={(text) => setInfo({...info, shopName: text})}
-                                value={info.shopName}
-                                errorStatus={errorState.shopName}
+                                placeholder={'Store Name*'}
+                                onChangeText={(text) => setInfo({...info, storeName: text})}
+                                value={info.storeName}
+                                errorStatus={errorState.storeName}
                                 errorRule={[
-                                    {pattern: /.+/, message: 'Shop Name Must Not Be Empty'},
+                                    {pattern: /.+/, message: 'Store Name Must Not Be Empty'},
                                 ]}
                             />
                             <NormalTextInput

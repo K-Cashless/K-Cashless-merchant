@@ -75,7 +75,7 @@ const MyQRScreen = () => {
                     alignSelf: 'center',
                     justifyContent: 'center'
                 }}>
-                    <MInfoSection title={'SHOP NAME'} value={store.getState().User.shopName}/>
+                    <MInfoSection title={'STORE NAME'} value={store.getState().User.storeName}/>
                     <View style={{height: 20}}/>
                     <MInfoSection title={'MERCHANT ID'} value={store.getState().User.id}/>
                     <View style={{

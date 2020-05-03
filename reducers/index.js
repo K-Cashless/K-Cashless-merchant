@@ -5,7 +5,7 @@ export const initialState = {
         id: null,
         email: null,
         token: null,
-        shopName: null,
+        storeName: null,
         pic: null,
         ownerName: null,
         balance: 0,
@@ -37,12 +37,12 @@ const reducer = (state = initialState, action) => {
                     pic: action.payload
                 }
             };
-        case actionType.SET_USER_SHOP_NAME:
+        case actionType.SET_USER_STORE_NAME:
             return {
                 ...state,
                 User: {
                     ...state.User,
-                    shopName: action.payload
+                    storeName: action.payload
                 }
             };
         case actionType.SET_USER_OWNER_NAME:

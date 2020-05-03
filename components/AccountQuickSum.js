@@ -26,7 +26,7 @@ const AccountQuickSum = ({User}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                         color: 'white',
-                    }}>{User.shopName}</Text>
+                    }}>{User.storeName}</Text>
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,

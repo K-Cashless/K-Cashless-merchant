@@ -1,28 +1,46 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {BallIndicator} from "react-native-indicators";
 import * as actions from '../actions';
 import store from '../store';
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
+import {getAllUserData} from '../firebase/functions';
 
-const SignInButton = ({navigation, userName, password}) => {
+
+const SignInButton = ({navigation, userName: email, password}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
-    async function signIn(userName, password) {
-        store.dispatch(actions.User.setId('M0001'));
-        store.dispatch(actions.User.setShopName('Disney Store'));
-        store.dispatch(actions.User.setOwnerName('Mickey Mouse'));
-        store.dispatch(actions.User.setBalance(10000));
-        store.dispatch(actions.User.setEmail('store@disney.com'));
-        store.dispatch(actions.User.setPhone('+012342222'));
-        store.dispatch(actions.User.setPic('https://www.ixxiyourworld.com/media/1676571/Mickey-Mouse-2.jpg?mode=crop&width=562&height=613'));
-        navigation.navigate('App');
+    function signIn(email, password) {
+        return axios.post(API_URL.SIGN_IN, {email: email, password: password});
     }
 
     const onPressAction = () => {
         setIsLoading(true);
         setButtonStyle(styles.buttonContainerOutline);
-        signIn(userName, password).then(setIsLoading(false));
+        signIn(email, password)
+            .then(res => {
+                store.dispatch(actions.User.setToken(res.data.token));
+                getAllUserData()
+                    .then(() => {
+                        setButtonStyle(styles.buttonContainer);
+                        setIsLoading(false);
+                        navigation.navigate('App');
+                    })
+                    .catch(error => {
+                        setButtonStyle(styles.buttonContainer);
+                        setIsLoading(false);
+                        console.log(error.response);
+                        Alert.alert('Error', 'Please Try Again');
+                    });
+            })
+            .catch(error => {
+                setButtonStyle(styles.buttonContainer);
+                setIsLoading(false);
+                console.log(error.response);
+                Alert.alert('Error', 'Please Try Again');
+            });
     };
 
     return (

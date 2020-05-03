@@ -16,7 +16,7 @@ export const User = {
     setEmail: (email) => ({type: actionType.SET_USER_EMAIL, payload: email}),
     setToken: (token) => ({type: actionType.SET_USER_TOKEN, payload: token}),
     setPhone: (phone) => ({type: actionType.SET_USER_PHONE, payload: phone}),
-    setShopName: (shopName) => ({type: actionType.SET_USER_SHOP_NAME, payload: shopName}),
+    setStoreName: (storeName) => ({type: actionType.SET_USER_STORE_NAME, payload: storeName}),
     clearAllUser: () => ({type: actionType.CLEAR_ALL_USER, payload: null}),
     setAnimationSignal: (signal) => ({type: actionType.SET_ANIMATION_SIGNAL, payload: signal})
 };

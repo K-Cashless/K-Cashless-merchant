@@ -55,7 +55,7 @@ const ManageAccount = ({navigation, User}) => {
                                   setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
-                        <UserInfo title={'Shop Name'} value={User.shopName} refRBSheet={refRBSheet}
+                        <UserInfo title={'Store Name'} value={User.storeName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
                         <UserInfo title={'Owner Name'} value={User.ownerName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
@@ -146,7 +146,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
         });
     };
 
-    const handleShopNameUpdate = async () => {
+    const handleStoreNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
             // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
@@ -334,17 +334,17 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     </View>
                 </View>
             );
-        case 'Shop Name':
+        case 'Store Name':
             return (
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
                     <NormalTextInput
-                        placeholder={'Enter your shop name*'}
+                        placeholder={'Enter your store name*'}
                         onChangeText={(text) => setField(text)}
                         value={field}
                         errorStatus={errorState}
                         errorRule={[
-                            {pattern: /.+/, message: 'Shop Name Must Not Be Empty'},
+                            {pattern: /.+/, message: 'Store Name Must Not Be Empty'},
                         ]}
                     />
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
@@ -360,7 +360,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                             text={'Done'}
                             disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
-                            onPress={handleShopNameUpdate}
+                            onPress={handleStoreNameUpdate}
                         />
                     </View>
                 </View>

@@ -6,7 +6,7 @@ import NormalTextInput from '../components/NormalTextInput';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
-    const [userName, setUserName] = useState("");
+    const [email, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -29,7 +29,7 @@ const SignIn = ({navigation}) => {
                             setErrorMsg('');
                             setUserName(text);
                         }}
-                        value={userName}
+                        value={email}
                     />
 
                     {/*Password Input*/}
@@ -47,7 +47,7 @@ const SignIn = ({navigation}) => {
                     <SignInButton
                         navigation={navigation}
                         setErrorMsg={setErrorMsg}
-                        userName={userName}
+                        email={email}
                         password={password}
                     />
 

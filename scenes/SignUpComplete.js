@@ -18,7 +18,7 @@ const SignUpComplete = ({navigation}) => {
                             </Text>
                         </View>
                         <Text style={[MainStyles.bodyText, {marginBottom: 20, textAlign: 'center'}]}>
-                            Your account is waiting for confirmation.
+                            Welcome to K Cashless!
                         </Text>
                     </View>
                 </View>

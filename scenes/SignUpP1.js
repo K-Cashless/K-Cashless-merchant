@@ -12,7 +12,7 @@ const SignUpP1 = ({navigation}) => {
         email: '',
         password: '',
         confirmPassword: '',
-        shopName: '',
+        storeName: '',
         ownerName: '',
         phone: ''
     });
