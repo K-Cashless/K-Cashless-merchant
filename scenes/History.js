@@ -4,19 +4,22 @@ import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import store from '../store';
 import {connect} from 'react-redux';
+// import {getAllUserData} from '../firebase/functions';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 async function HistoryLoader() {
     // await getAllUserData()
     //     .catch(error => console.log(error));
 }
 
-const History = ({navigation}) => {
+const History = ({navigation, list}) => {
+
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
             <View style={{marginHorizontal: 20, top: '5%', height: '95%'}}>
                 <SubScreenHeader navigation={navigation} title={'History'} backButton={true}/>
             </View>
-            <HistoryList/>
+            <HistoryList list={list}/>
         </View>
     );
 };
@@ -49,8 +52,6 @@ const HistoryList = () => {
         onRefresh();
     }, []);
 
-    console.log(store.getState().User.history);
-
     return (
         <SafeAreaView style={{position: 'absolute', top: '13%', height: '87%', width: '100%'}}>
             <FlatList
@@ -58,7 +59,7 @@ const HistoryList = () => {
                 renderItem={({item}) => {
                     return (
                         <HistoryCard title={item.info} time={item.createdAt}
-                                     transaction={item.amount} type={item.info}/>
+                                     transaction={item.amount} type={item.info} to={item.to}/>
                     );
                 }}
                 keyExtractor={item => item.key}
@@ -76,7 +77,7 @@ const HistoryList = () => {
 
 };
 
-const HistoryCard = ({time, title, borderTop, type, transaction}) => {
+const HistoryCard = ({time, title, borderTop, type, transaction, to}) => {
     const [green, setGreen] = useState(false);
     useEffect(() => {
         if (type === 'Redeem Point' || type === 'Top-Up Money') setGreen(true);
@@ -98,8 +99,9 @@ const HistoryCard = ({time, title, borderTop, type, transaction}) => {
                             flex: 2,
                             fontFamily: 'proxima-bold',
                             color: 'white',
-                            fontSize: 20
-                        }}>{title}</Text>
+                            fontSize: 18
+                        }}>{title} {!green ? (<><Icon name='arrow-right' color={'white'} size={14}/> {to}</>) : null}
+                        </Text>
                         <Text style={{
                             flex: 1,
                             fontFamily: 'proxima-regular',

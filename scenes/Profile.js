@@ -60,7 +60,7 @@ const ProfileCard = ({User}) => {
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
                         color: 'white',
-                    }}>{User.firstName} {User.lastName}</Text>
+                    }}>{User.ownerName}</Text>
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',

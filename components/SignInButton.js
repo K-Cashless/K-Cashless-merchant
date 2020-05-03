@@ -11,8 +11,7 @@ const SignInButton = ({navigation, userName, password}) => {
     async function signIn(userName, password) {
         store.dispatch(actions.User.setId('M0001'));
         store.dispatch(actions.User.setShopName('Disney Store'));
-        store.dispatch(actions.User.setFirstName('Mickey'));
-        store.dispatch(actions.User.setLastName('Mouse'));
+        store.dispatch(actions.User.setOwnerName('Mickey Mouse'));
         store.dispatch(actions.User.setBalance(10000));
         store.dispatch(actions.User.setEmail('store@disney.com'));
         store.dispatch(actions.User.setPhone('+012342222'));

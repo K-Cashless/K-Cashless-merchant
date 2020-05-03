@@ -5,6 +5,7 @@ import Navigator from './navigations/Navigator';
 import {AppLoading, Notifications} from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Font from 'expo-font';
+import {Audio} from 'expo-av';
 
 import {Provider} from 'react-redux';
 import store from './store';
@@ -30,14 +31,39 @@ async function registerNotification() {
     console.log(status.status, token);
 }
 
+async function registerAudio() {
+    await Audio.requestPermissionsAsync();
+}
+
 export default function App() {
     const [dataLoaded, setDataLoaded] = useState(false);
+
     useEffect(() => {
         registerNotification().then();
-        Notifications.addListener(({origin, data}) => {
-            console.log('NOTIFICATIONS: ', origin, data);
-            store.dispatch(action.User.pushNotificationsList(data));
+        registerAudio().then();
+        Notifications.addListener(async ({origin, data}) => {
+            console.log('NOTIFICATIONS: ', origin, data, Date.now());
+            const infoToPush = {
+                id: Date.now().toString(),
+                read: false,
+                title: data.title,
+                body: data.body
+            };
+            store.dispatch(action.User.pushNotificationsList(infoToPush));
             store.dispatch(action.User.setNotificationsUnread(true));
+
+            store.dispatch(action.User.setAnimationSignal(true));
+            const soundObject = new Audio.Sound();
+            try {
+                await soundObject.loadAsync(require('./assets/notification.wav'));
+                await soundObject.playAsync();
+                // Your sound is playing!
+            } catch (error) {
+                // An error occurred!
+            }
+            setTimeout(() => {
+                store.dispatch(action.User.setAnimationSignal(false))
+            }, 500);
         });
     }, []);
 

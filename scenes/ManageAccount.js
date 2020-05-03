@@ -55,9 +55,9 @@ const ManageAccount = ({navigation, User}) => {
                                   setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
-                        <UserInfo title={'First Name'} value={User.firstName} refRBSheet={refRBSheet}
+                        <UserInfo title={'Shop Name'} value={User.shopName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
-                        <UserInfo title={'Last Name'} value={User.lastName} refRBSheet={refRBSheet}
+                        <UserInfo title={'Owner Name'} value={User.ownerName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
                         <UserInfo title={'Phone'} value={User.phone} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
@@ -146,7 +146,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
         });
     };
 
-    const handleFirstNameUpdate = async () => {
+    const handleShopNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
             // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
@@ -196,7 +196,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
             //     })
         });
     };
-    const handleLastNameUpdate = async () => {
+    const handleOwnerNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
             // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
@@ -334,17 +334,17 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                     </View>
                 </View>
             );
-        case 'First Name':
+        case 'Shop Name':
             return (
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
                     <NormalTextInput
-                        placeholder={'Enter your first name*'}
+                        placeholder={'Enter your shop name*'}
                         onChangeText={(text) => setField(text)}
                         value={field}
                         errorStatus={errorState}
                         errorRule={[
-                            {pattern: /.+/, message: 'First Name Must Not Be Empty'},
+                            {pattern: /.+/, message: 'Shop Name Must Not Be Empty'},
                         ]}
                     />
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
@@ -360,12 +360,12 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                             text={'Done'}
                             disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgba(150,150,150,0.5)' : 'rgb(38,115,226)'}}
-                            onPress={handleFirstNameUpdate}
+                            onPress={handleShopNameUpdate}
                         />
                     </View>
                 </View>
             );
-        case 'Last Name':
+        case 'Owner Name':
             return (
 
                 <View style={{marginHorizontal: 20}}>
@@ -392,7 +392,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                             text={'Done'}
                             disabled={errorState[0]}
                             style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={handleLastNameUpdate}
+                            onPress={handleOwnerNameUpdate}
                         />
                     </View>
                 </View>

@@ -13,8 +13,7 @@ const SignUpP1 = ({navigation}) => {
         password: '',
         confirmPassword: '',
         shopName: '',
-        firstName: '',
-        lastName: '',
+        ownerName: '',
         phone: ''
     });
     const [allowProceed, setAllowProceed] = useState(false);

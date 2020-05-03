@@ -7,10 +7,10 @@ export const initialState = {
         token: null,
         shopName: null,
         pic: null,
-        firstName: null,
-        lastName: null,
+        ownerName: null,
         balance: 0,
         notifications: {
+            animationSignal: false,
             haveUnread: false,
             list: []
         },
@@ -45,20 +45,12 @@ const reducer = (state = initialState, action) => {
                     shopName: action.payload
                 }
             };
-        case actionType.SET_USER_FIRST_NAME:
+        case actionType.SET_USER_OWNER_NAME:
             return {
                 ...state,
                 User: {
                     ...state.User,
-                    firstName: action.payload
-                }
-            };
-        case actionType.SET_USER_LAST_NAME:
-            return {
-                ...state,
-                User: {
-                    ...state.User,
-                    lastName: action.payload
+                    ownerName: action.payload
                 }
             };
         case actionType.SET_USER_BALANCE:

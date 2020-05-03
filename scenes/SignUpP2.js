@@ -1,51 +1,41 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
-import {NavigationActions, StackActions} from 'react-navigation';
+import {Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import * as color from '../styles/Colors';
 import TransparentButton from "../components/TransparentButton";
+// import API_URL from '../firebase/apiLinks';
 
 const SignUpP2 = ({navigation}) => {
-    const [imgUri, setImgUri] = useState(null);
+    const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     let errorState = {
         shopName: useState(true),
-        firstName: useState(true),
-        lastName: useState(true),
+        ownerName: useState(true),
         phone: useState(true),
     };
     const [allowProceed, setAllowProceed] = useState(false);
     useEffect(() => {
         setAllowProceed(
-            errorState.firstName[0] === false &&
-            errorState.lastName[0] === false &&
+            errorState.shopName[0] === false &&
+            errorState.ownerName[0] === false &&
             errorState.phone[0] === false
         );
     });
 
     const handleSignUp = () => {
-        return new Promise((resolve) => {
-            // TODO
+        return new Promise((resolve, reject) => {
             const infoToSend = {
                 email: info.email,
                 password: info.password,
                 confirmPassword: info.confirmPassword,
-                firstName: info.firstName,
-                lastName: info.lastName,
+                shopName: info.shopName,
+                ownerName: info.ownerName,
                 phone: info.phone
             };
             console.log(infoToSend);
-
-            const resetAction = StackActions.reset({
-                index: 0,
-                actions: [NavigationActions.navigate({routeName: 'SignUpComplete'})],
-            });
-            navigation.dispatch(resetAction);
-            resolve();
 
             // axios.post(API_URL.SIGN_UP, infoToSend)
             //     .then(res => {
@@ -73,20 +63,6 @@ const SignUpP2 = ({navigation}) => {
                     <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
-                            <View style={{marginTop: 20, alignItems: 'center'}}>
-                                <View style={{width: 100, height: 100, borderRadius: 100, backgroundColor: 'white'}}>
-                                    {
-                                        imgUri &&
-                                        <Image source={{uri: imgUri}}
-                                               style={{width: 100, height: 100, borderRadius: 100}}
-                                               resizeMode='cover'/>
-                                    }
-                                </View>
-                                <TextButton text={'Add Your Photo'} color={color.primary}
-                                            onPress={() => handleImagePicking(setImgUri)}/>
-                            </View>
-
-
                             <NormalTextInput
                                 placeholder={'Shop Name*'}
                                 onChangeText={(text) => setInfo({...info, shopName: text})}
@@ -96,24 +72,13 @@ const SignUpP2 = ({navigation}) => {
                                     {pattern: /.+/, message: 'Shop Name Must Not Be Empty'},
                                 ]}
                             />
-
                             <NormalTextInput
-                                placeholder={'First Name*'}
-                                onChangeText={(text) => setInfo({...info, firstName: text})}
-                                value={info.firstName}
-                                errorStatus={errorState.firstName}
+                                placeholder={'Owner Name*'}
+                                onChangeText={(text) => setInfo({...info, ownerName: text})}
+                                value={info.ownerName}
+                                errorStatus={errorState.ownerName}
                                 errorRule={[
-                                    {pattern: /.+/, message: 'First Name Must Not Be Empty'},
-                                ]}
-                            />
-
-                            <NormalTextInput
-                                placeholder={'Last Name*'}
-                                onChangeText={(text) => setInfo({...info, lastName: text})}
-                                value={info.lastName}
-                                errorStatus={errorState.lastName}
-                                errorRule={[
-                                    {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                                    {pattern: /.+/, message: 'Owner Name Must Not Be Empty'},
                                 ]}
                             />
                             <NormalTextInput
