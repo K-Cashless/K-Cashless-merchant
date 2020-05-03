@@ -5,6 +5,8 @@ import * as colors from '../styles/Colors';
 import {connect} from 'react-redux'
 import SubScreenHeader from "../components/SubScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import store from '../store';
+import * as actions from '../actions';
 
 const Profile = ({navigation, User}) => {
     return (
@@ -95,8 +97,8 @@ const SignOutButton = ({navigation}) => {
     return (
         <TouchableOpacity
             style={{position: 'absolute', bottom: 50, width: '100%'}}
-            onPress={() => {
-                console.log('press!');
+            onPress={async () => {
+                await store.dispatch(actions.User.clearAllUser());
                 navigation.navigate('SignIn');
             }}
         >
