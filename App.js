@@ -29,6 +29,7 @@ async function registerNotification() {
     const token = await Notifications.getExpoPushTokenAsync();
     console.log('Permission: ');
     console.log(status.status, token);
+    store.dispatch(action.setExpoPushToken(token));
 }
 
 async function registerAudio() {

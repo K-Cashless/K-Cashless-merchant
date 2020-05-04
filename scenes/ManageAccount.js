@@ -15,6 +15,7 @@ import axios from 'axios';
 import API_URL from '../firebase/apiLinks';
 import * as actions from "../actions";
 import store from '../store';
+import * as mime from 'react-native-mime-types';
 
 
 const ManageAccount = ({navigation, User}) => {
@@ -381,29 +382,30 @@ const handleImagePicking = async (token, setShowLoading) => {
         if (result.cancelled === false) {
             let infoToSend = new FormData();
             const imgUri = result.uri;
+            const mimeType = mime.lookup(imgUri);
+            const imgExtension = mime.extension(mimeType);
             infoToSend.append('image', {
                 uri: imgUri,
-                name: 'userProfile.jpg',
-                type: 'image/jpg'
+                name: 'userProfile.' + imgExtension,
+                type: mimeType
             });
             console.log("uploading: ", infoToSend);
-            // setShowLoading(true);
-            // axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
-            //     'headers': {
-            //         'Content-Type': 'multipart/form-data',
-            //         'Authorization': 'Bearer ' + token
-            //     }
-            // })
-            //     .then(res => {
-            //         setShowLoading(false);
-            //         console.log(res);
-            //         store.dispatch(actions.User.setPic(result.uri));
-            //     })
-            //     .catch(error => {
-            //         setShowLoading(false);
-            //         Alert.alert('Error Changing Your Picture');
-            //         console.log(error.response);
-            //     });
+            setShowLoading(true);
+            axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
+                'headers': {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Mearer ' + token
+                }
+            })
+                .then(() => {
+                    setShowLoading(false);
+                    store.dispatch(actions.User.setPic(result.uri));
+                })
+                .catch(error => {
+                    setShowLoading(false);
+                    Alert.alert('Error Changing Your Picture', 'Please Try Again');
+                    console.log(error.response);
+                });
         }
     }
 };

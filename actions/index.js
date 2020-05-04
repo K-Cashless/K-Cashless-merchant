@@ -21,3 +21,5 @@ export const User = {
     setAnimationSignal: (signal) => ({type: actionType.SET_ANIMATION_SIGNAL, payload: signal})
 };
 
+export const setExpoPushToken = (token) => ({type: actionType.SET_EXPO_PUSH_TOKEN, payload: token});
+
