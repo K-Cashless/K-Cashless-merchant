@@ -25,7 +25,6 @@ const AccountQuickSum = () => {
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 25,
-                        fontWeight: 'bold',
                         color: 'white',
                     }}>{store.getState().User.storeName}</Text>
                     <Text style={{
@@ -37,7 +36,6 @@ const AccountQuickSum = () => {
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             fontSize: 25,
-                            fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
                         }}>{store.getState().User.balance.toFixed(2)} {'\u0E3F'}</Text>

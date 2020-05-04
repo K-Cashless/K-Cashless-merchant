@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
     buttonText: {
         fontFamily: 'proxima-bold',
         fontSize: 25,
-        fontWeight: 'bold',
         color: 'white',
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -127,7 +126,6 @@ const styles = StyleSheet.create({
     error: {
         fontFamily: 'proxima-bold',
         fontSize: 25,
-        fontWeight: 'bold',
         color: 'red',
         textAlign: 'center',
         textAlignVertical: 'center',

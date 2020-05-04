@@ -55,7 +55,6 @@ const ProfileCard = ({User}) => {
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 25,
-                        fontWeight: 'bold',
                         color: 'white',
                     }}>{User.storeName}</Text>
                     <Text style={{
@@ -67,7 +66,6 @@ const ProfileCard = ({User}) => {
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             fontSize: 25,
-                            fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
                         }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
