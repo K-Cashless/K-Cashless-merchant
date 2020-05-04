@@ -7,6 +7,8 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import store from '../store';
 import * as actions from '../actions';
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
 
 const Profile = ({navigation, User}) => {
     return (
@@ -98,8 +100,16 @@ const SignOutButton = ({navigation}) => {
         <TouchableOpacity
             style={{position: 'absolute', bottom: 50, width: '100%'}}
             onPress={async () => {
-                await store.dispatch(actions.User.clearAllUser());
-                navigation.navigate('SignIn');
+                await axios.post(API_URL.SIGN_OUT, {}, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                    .then(res => {
+                        console.log(res);
+                        store.dispatch(actions.User.clearAllUser());
+                        navigation.navigate('SignIn');
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                        Alert.alert('Error Signing Out', 'Please Try Again');
+                    });
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>
