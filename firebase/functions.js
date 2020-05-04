@@ -5,13 +5,13 @@ import * as actions from '../actions';
 
 export const getAllUserData = () => {
     return new Promise(async (resolve, reject) => {
-        await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+        await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
             .then(res => {
                 console.log(res.data[0]);
                 store.dispatch(actions.User.setId(res.data[0].handle));
-                store.dispatch(actions.User.setStoreName(res.data[0].shopName));
+                store.dispatch(actions.User.setStoreName(res.data[0].storeName));
                 store.dispatch(actions.User.setOwnerName(res.data[0].ownerName));
-                store.dispatch(actions.User.setBalance(res.data[0].deposit));
+                store.dispatch(actions.User.setBalance(res.data[0].total));
                 store.dispatch(actions.User.setEmail(res.data[0].email));
                 store.dispatch(actions.User.setPhone(res.data[0].phone));
                 store.dispatch(actions.User.setPic(res.data[0].imageUrl));
@@ -19,8 +19,9 @@ export const getAllUserData = () => {
             .catch(error => {
                 reject(error);
             });
-        await axios.get(API_URL.GET_TRANSACTIONS, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
+        await axios.get(API_URL.GET_MERCHANT_TRANSACTION, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
             .then(res => {
+                console.log(res);
                 let arr = res.data;
                 for (let i = 0; i < arr.length; ++i) {
                     arr[i] = {

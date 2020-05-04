@@ -4,12 +4,12 @@ import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import store from '../store';
 import {connect} from 'react-redux';
-// import {getAllUserData} from '../firebase/functions';
+import {getAllUserData} from '../firebase/functions';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 async function HistoryLoader() {
-    // await getAllUserData()
-    //     .catch(error => console.log(error));
+    await getAllUserData()
+        .catch(error => console.log(error));
 }
 
 const History = ({navigation, list}) => {
@@ -79,8 +79,9 @@ const HistoryList = () => {
 
 const HistoryCard = ({time, title, borderTop, type, transaction, to}) => {
     const [green, setGreen] = useState(false);
+
     useEffect(() => {
-        if (type === 'Redeem Point' || type === 'Top-Up Money') setGreen(true);
+        if (type === 'Paid Merchant') setGreen(true);
     }, []);
     return (
         <TouchableHighlight>
@@ -100,7 +101,7 @@ const HistoryCard = ({time, title, borderTop, type, transaction, to}) => {
                             fontFamily: 'proxima-bold',
                             color: 'white',
                             fontSize: 18
-                        }}>{title} {!green ? (<><Icon name='arrow-right' color={'white'} size={14}/> {to}</>) : null}
+                        }}>{title} {green ? (<><Icon name='arrow-right' color={'white'} size={14}/> {to}</>) : null}
                         </Text>
                         <Text style={{
                             flex: 1,

@@ -8,11 +8,12 @@ import API_URL from '../firebase/apiLinks';
 import {getAllUserData} from '../firebase/functions';
 
 
-const SignInButton = ({navigation, userName: email, password}) => {
+const SignInButton = ({navigation, email, password}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonStyle, setButtonStyle] = useState(styles.buttonContainer);
 
     function signIn(email, password) {
+        console.log(email, password);
         return axios.post(API_URL.SIGN_IN, {email: email, password: password});
     }
 
@@ -21,6 +22,7 @@ const SignInButton = ({navigation, userName: email, password}) => {
         setButtonStyle(styles.buttonContainerOutline);
         signIn(email, password)
             .then(res => {
+                console.log(res.data.token);
                 store.dispatch(actions.User.setToken(res.data.token));
                 getAllUserData()
                     .then(() => {

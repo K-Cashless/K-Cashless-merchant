@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Keyboard, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {Alert, Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
-import * as ImagePicker from 'expo-image-picker';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from "../components/SubScreenHeader";
 import NormalTextInput from "../components/NormalTextInput";
@@ -12,9 +11,10 @@ import API_URL from '../firebase/apiLinks';
 
 
 const SignUpP2 = ({navigation}) => {
-    const [imgUri, setImgUri] = useState('');
+    // const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     let errorState = {
+        storeUserName: useState(true),
         storeName: useState(true),
         ownerName: useState(true),
         phone: useState(true),
@@ -24,7 +24,8 @@ const SignUpP2 = ({navigation}) => {
         setAllowProceed(
             errorState.storeName[0] === false &&
             errorState.ownerName[0] === false &&
-            errorState.phone[0] === false
+            errorState.phone[0] === false &&
+            errorState.storeName[0] === false
         );
     });
 
@@ -34,7 +35,7 @@ const SignUpP2 = ({navigation}) => {
                 email: info.email,
                 password: info.password,
                 confirmPassword: info.confirmPassword,
-                handle: "0015",
+                handle: info.storeUserName,
                 storeName: info.storeName,
                 ownerName: info.ownerName,
                 phone: info.phone,
@@ -67,6 +68,16 @@ const SignUpP2 = ({navigation}) => {
                     <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
+                            <NormalTextInput
+                                placeholder={'Store User Name*'}
+                                onChangeText={(text) => setInfo({...info, storeUserName: text})}
+                                value={info.storeUserName}
+                                errorStatus={errorState.storeUserName}
+                                errorRule={[
+                                    {pattern: /.+/, message: 'Store User Name Must Not Be Empty'},
+                                    {pattern: /^[^ ]+$/, message: 'Store User Name Must Not Contains Space'},
+                                ]}
+                            />
                             <NormalTextInput
                                 placeholder={'Store Name*'}
                                 onChangeText={(text) => setInfo({...info, storeName: text})}
@@ -106,30 +117,30 @@ const SignUpP2 = ({navigation}) => {
                 </KeyboardAwareScrollView>
             </TouchableWithoutFeedback>
         </View>
-    )
+    );
 };
 
-const TextButton = ({text, color, onPress}) => {
-    return (
-        <TouchableOpacity style={{margin: 20}} onPress={onPress}>
-            <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
-        </TouchableOpacity>
-    )
-};
-
-const handleImagePicking = async (setImgUri) => {
-    let permission = await ImagePicker.requestCameraRollPermissionsAsync();
-    if (permission.status === 'granted') {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1
-        });
-        if (result.cancelled === false) {
-            setImgUri(result.uri);
-        }
-    }
-};
+// const TextButton = ({text, color, onPress}) => {
+//     return (
+//         <TouchableOpacity style={{margin: 20}} onPress={onPress}>
+//             <Text style={[MainStyles.head2Text, {color: color}]}>{text}</Text>
+//         </TouchableOpacity>
+//     )
+// };
+//
+// const handleImagePicking = async (setImgUri) => {
+//     let permission = await ImagePicker.requestCameraRollPermissionsAsync();
+//     if (permission.status === 'granted') {
+//         let result = await ImagePicker.launchImageLibraryAsync({
+//             mediaTypes: ImagePicker.MediaTypeOptions.All,
+//             allowsEditing: true,
+//             aspect: [1, 1],
+//             quality: 1
+//         });
+//         if (result.cancelled === false) {
+//             setImgUri(result.uri);
+//         }
+//     }
+// };
 
 export default SignUpP2;

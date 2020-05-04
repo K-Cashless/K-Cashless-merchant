@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import RBSheet from "react-native-raw-bottom-sheet";
 import * as ImagePicker from 'expo-image-picker';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import SubScreenHeader from "../components/SubScreenHeader";
 import MInfoSection from '../components/MInfoSection';
 import MainStyles from '../styles/MainStyles';
@@ -11,6 +11,10 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {BallIndicator} from "react-native-indicators";
 import NormalTextInput from "../components/NormalTextInput";
 import TransparentButton from "../components/TransparentButton";
+import axios from 'axios';
+import API_URL from '../firebase/apiLinks';
+import * as actions from "../actions";
+import store from '../store';
 
 
 const ManageAccount = ({navigation, User}) => {
@@ -51,10 +55,10 @@ const ManageAccount = ({navigation, User}) => {
                         </View>
 
 
-                        <UserInfo title={'Merchant ID'} value={User.id} refRBSheet={refRBSheet}
+                        <UserInfo title={'Username'} value={User.id} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
-                                  setEditedField={setEditedField}/>
+                                  setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Store Name'} value={User.storeName} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField}/>
                         <UserInfo title={'Owner Name'} value={User.ownerName} refRBSheet={refRBSheet}
@@ -94,250 +98,148 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const [field, setField] = useState('');
     const errorState = useState(true);
 
-    const handleEmailUpdate = async () => {
-        return new Promise(async (resolve, reject) => {
-            let infoToSend = null;
-            // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-            //     .then(res => {
-            //         // Update User Data
-            //         store.dispatch(actions.User.setId(res.data[0].userId));
-            //         store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-            //         store.dispatch(actions.User.setLastName(res.data[0].lastName));
-            //         store.dispatch(actions.User.setBalance(res.data[0].deposit));
-            //         store.dispatch(actions.User.setKpoints(res.data[0].point));
-            //         store.dispatch(actions.User.setEmail(res.data[0].email));
-            //         store.dispatch(actions.User.setPhone(res.data[0].phone));
-            //         store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-            //
-            //         const tempInfo = res.data[0];
-            //         infoToSend = {
-            //             email: field,
-            //             password: "",
-            //             confirmPassword: "",
-            //             handle: tempInfo.handle,
-            //             firstName: tempInfo.firstName,
-            //             lastName: tempInfo.lastName,
-            //             phone: tempInfo.phone,
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     });
-            //
-            // await console.log(infoToSend);
-            //
-            // await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-            //     'headers': {
-            //         'Authorization': 'Bearer ' + store.getState().User.token
-            //     }
-            // })
-            //     .then(() => {
-            //         store.dispatch(actions.User.setEmail(field));
-            //         refRBSheet.current.close();
-            //         resolve();
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     })
-        });
-    };
-
     const handleStoreNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-            //     .then(res => {
-            //         // Update User Data
-            //         store.dispatch(actions.User.setId(res.data[0].userId));
-            //         store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-            //         store.dispatch(actions.User.setLastName(res.data[0].lastName));
-            //         store.dispatch(actions.User.setBalance(res.data[0].deposit));
-            //         store.dispatch(actions.User.setKpoints(res.data[0].point));
-            //         store.dispatch(actions.User.setEmail(res.data[0].email));
-            //         store.dispatch(actions.User.setPhone(res.data[0].phone));
-            //         store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-            //
-            //         const tempInfo = res.data[0];
-            //         infoToSend = {
-            //             email: tempInfo.email,
-            //             password: "",
-            //             confirmPassword: "",
-            //             handle: tempInfo.handle,
-            //             firstName: field,
-            //             lastName: tempInfo.lastName,
-            //             phone: tempInfo.phone,
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info (GET DATA)', 'Please Try Again');
-            //         reject();
-            //     });
-            // await console.log(infoToSend);
-            //
-            // await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-            //     'headers': {
-            //         'Authorization': 'Bearer ' + store.getState().User.token
-            //     }
-            // })
-            //     .then(() => {
-            //         store.dispatch(actions.User.setFirstName(field));
-            //         refRBSheet.current.close();
-            //         resolve();
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info (UPDATE)', 'Please Try Again');
-            //         reject();
-            //     })
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].handle));
+                    store.dispatch(actions.User.setStoreName(res.data[0].storeName));
+                    store.dispatch(actions.User.setOwnerName(res.data[0].ownerName));
+                    store.dispatch(actions.User.setBalance(res.data[0].total));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
+
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        storeName: field,
+                        ownerName: tempInfo.ownerName,
+                        phone: tempInfo.phone,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+
+            await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Mearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setStoreName(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
         });
     };
     const handleOwnerNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-            //     .then(res => {
-            //         // Update User Data
-            //         store.dispatch(actions.User.setId(res.data[0].userId));
-            //         store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-            //         store.dispatch(actions.User.setLastName(res.data[0].lastName));
-            //         store.dispatch(actions.User.setBalance(res.data[0].deposit));
-            //         store.dispatch(actions.User.setKpoints(res.data[0].point));
-            //         store.dispatch(actions.User.setEmail(res.data[0].email));
-            //         store.dispatch(actions.User.setPhone(res.data[0].phone));
-            //         store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-            //
-            //         const tempInfo = res.data[0];
-            //         infoToSend = {
-            //             email: tempInfo.email,
-            //             password: "",
-            //             confirmPassword: "",
-            //             handle: tempInfo.handle,
-            //             firstName: tempInfo.firstName,
-            //             lastName: field,
-            //             phone: tempInfo.phone,
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     });
-            // await console.log(infoToSend);
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].handle));
+                    store.dispatch(actions.User.setStoreName(res.data[0].storeName));
+                    store.dispatch(actions.User.setOwnerName(res.data[0].ownerName));
+                    store.dispatch(actions.User.setBalance(res.data[0].total));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
 
-            // await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-            //     'headers': {
-            //         'Authorization': 'Bearer ' + store.getState().User.token
-            //     }
-            // })
-            //     .then(() => {
-            //         store.dispatch(actions.User.setLastName(field));
-            //         refRBSheet.current.close();
-            //         resolve();
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     })
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        storeName: tempInfo.storeName,
+                        ownerName: field,
+                        phone: tempInfo.phone,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+
+            await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Mearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setOwnerName(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
         });
     };
 
     const handlePhoneUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            // await axios.get(API_URL.GET_USER_DATA, {'headers': {'Authorization': 'Bearer ' + store.getState().User.token}})
-            //     .then(res => {
-            //         // Update User Data
-            //         store.dispatch(actions.User.setId(res.data[0].userId));
-            //         store.dispatch(actions.User.setFirstName(res.data[0].firstName));
-            //         store.dispatch(actions.User.setLastName(res.data[0].lastName));
-            //         store.dispatch(actions.User.setBalance(res.data[0].deposit));
-            //         store.dispatch(actions.User.setKpoints(res.data[0].point));
-            //         store.dispatch(actions.User.setEmail(res.data[0].email));
-            //         store.dispatch(actions.User.setPhone(res.data[0].phone));
-            //         store.dispatch(actions.User.setPic(res.data[0].imageUrl));
-            //
-            //         const tempInfo = res.data[0];
-            //         infoToSend = {
-            //             email: tempInfo.email,
-            //             password: "",
-            //             confirmPassword: "",
-            //             handle: tempInfo.handle,
-            //             firstName: tempInfo.firstName,
-            //             lastName: tempInfo.lastName,
-            //             phone: field,
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     });
-            // await console.log(infoToSend);
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                .then(res => {
+                    // Update User Data
+                    store.dispatch(actions.User.setId(res.data[0].handle));
+                    store.dispatch(actions.User.setStoreName(res.data[0].storeName));
+                    store.dispatch(actions.User.setOwnerName(res.data[0].ownerName));
+                    store.dispatch(actions.User.setBalance(res.data[0].total));
+                    store.dispatch(actions.User.setEmail(res.data[0].email));
+                    store.dispatch(actions.User.setPhone(res.data[0].phone));
+                    store.dispatch(actions.User.setPic(res.data[0].imageUrl));
 
-            // await axios.post(API_URL.UPDATE_USER_DATA, infoToSend, {
-            //     'headers': {
-            //         'Authorization': 'Bearer ' + store.getState().User.token
-            //     }
-            // })
-            //     .then(() => {
-            //         store.dispatch(actions.User.setPhone(field));
-            //         refRBSheet.current.close();
-            //         resolve();
-            //     })
-            //     .catch(error => {
-            //         console.log(error.response);
-            //         Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
-            //         reject();
-            //     })
+                    const tempInfo = res.data[0];
+                    infoToSend = {
+                        storeName: tempInfo.storeName,
+                        ownerName: tempInfo.ownerName,
+                        phone: field,
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
+            await console.log(infoToSend);
+
+            await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
+                'headers': {
+                    'Authorization': 'Mearer ' + store.getState().User.token
+                }
+            })
+                .then(() => {
+                    store.dispatch(actions.User.setPhone(field));
+                    refRBSheet.current.close();
+                    resolve();
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    Alert.alert('Error Trying to Update Your Info', 'Please Try Again');
+                    reject();
+                });
         });
     };
 
     switch (editedField) {
-        case 'Email':
-            return (
-                <View style={{marginHorizontal: 20}}>
-                    <Text style={[MainStyles.bodyText]}>Please Enter Email</Text>
-                    <NormalTextInput
-                        placeholder={'Enter your new email*'}
-                        onChangeText={(text) => setField(text)}
-                        value={field}
-                        errorStatus={errorState}
-                        errorRule={[
-                            {
-                                pattern: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                                message: 'Incorrect Email Format'
-                            },
-                            {pattern: /^\w+([.-]?\w+)*@kmitl.ac.th$/, message: 'KMITL Email Only'},
-                        ]}
-                    />
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
-                            <Text style={[MainStyles.bodyText, {
-                                fontFamily: 'proxima-bold',
-                                color: 'red',
-                                marginTop: 20,
-                                right: 25
-                            }]}>Cancel</Text>
-                        </TouchableOpacity>
-                        <TransparentButton
-                            text={'Done'}
-                            disabled={errorState[0]}
-                            style={{backgroundColor: errorState[0] ? 'rgb(150,150,150)' : 'rgb(38,115,226)'}}
-                            onPress={handleEmailUpdate}
-                        />
-                    </View>
-                </View>
-            );
         case 'Store Name':
             return (
                 <View style={{marginHorizontal: 20}}>
-                    <Text style={[MainStyles.bodyText]}>Please Enter First Name</Text>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Store Name</Text>
                     <NormalTextInput
                         placeholder={'Enter your store name*'}
                         onChangeText={(text) => setField(text)}

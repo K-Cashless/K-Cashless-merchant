@@ -10,7 +10,7 @@ const RecentActivity = () => {
     const [green, setGreen] = useState(false);
 
     useEffect(() => {
-        recentData && setGreen(recentData.info === 'Redeem Point' || recentData.info === 'Top-Up Money');
+        recentData && setGreen(recentData.info === 'Paid Merchant');
     });
 
     const ListGenerator = () => {

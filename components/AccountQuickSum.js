@@ -1,9 +1,10 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
+import store from '../store';
 
 
-const AccountQuickSum = ({User}) => {
+const AccountQuickSum = () => {
     return (
         <View style={{
             backgroundColor: colors.primary,
@@ -26,12 +27,12 @@ const AccountQuickSum = ({User}) => {
                         fontSize: 25,
                         fontWeight: 'bold',
                         color: 'white',
-                    }}>{User.storeName}</Text>
+                    }}>{store.getState().User.storeName}</Text>
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
                         color: 'white',
-                    }}>{User.firstName} {User.lastName}</Text>
+                    }}>{store.getState().User.ownerName}</Text>
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',
@@ -39,7 +40,7 @@ const AccountQuickSum = ({User}) => {
                             fontWeight: 'bold',
                             color: 'white',
                             textAlign: 'right'
-                        }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
+                        }}>{store.getState().User.balance.toFixed(2)} {'\u0E3F'}</Text>
                     </View>
                 </View>
             </View>

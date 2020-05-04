@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
+import {Alert, Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -13,11 +13,18 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import QRCode from 'react-native-qrcode-svg';
 import MInfoSection from "../components/MInfoSection";
 import RecentActivity from '../components/RecentActivity';
+import {getAllUserData} from "../firebase/functions";
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = () => {
         setRefreshing(false);
+        getAllUserData()
+            .then(() => setRefreshing(false))
+            .catch(error => {
+                console.log(error.response);
+                Alert.alert('Error Updating Your Info', '');
+            });
     };
     return (
         <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -40,7 +47,7 @@ const HomeScreen = ({navigation}) => {
                     }
                 >
                     <View style={{marginTop: 20, marginHorizontal: 20}}>
-                        <AccountQuickSum User={store.getState().User}/>
+                        <AccountQuickSum/>
                     </View>
                     <View style={{marginTop: 20, marginHorizontal: 20, height: 100}}>
                         <RecentActivity/>

@@ -6,7 +6,7 @@ import NormalTextInput from '../components/NormalTextInput';
 import * as colors from '../styles/Colors';
 
 const SignIn = ({navigation}) => {
-    const [email, setUserName] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
 
@@ -27,7 +27,7 @@ const SignIn = ({navigation}) => {
                         placeholder={'Email'}
                         onChangeText={(text) => {
                             setErrorMsg('');
-                            setUserName(text);
+                            setEmail(text);
                         }}
                         value={email}
                     />

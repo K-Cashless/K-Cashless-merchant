@@ -1,14 +1,28 @@
-import React, {useState} from 'react';
-import {Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, Keyboard, Text, TouchableWithoutFeedback, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import SubScreenHeader from '../components/SubScreenHeader';
 import LInfoSectionTHB from '../components/LInfoSectionTHB';
-import NormalTextInput from "../components/NormalTextInput";
 import BlueButton from "../components/BlueButton";
 import {connect} from 'react-redux';
+import NumberTextInput from "../components/NumberTextInput";
+import store from '../store';
+import axios from 'axios';
+import API_URL from "../firebase/apiLinks";
 
 const RequestMoney = ({navigation, balance}) => {
-    const [topUpCode, setTopUpCode] = useState('');
+    const [amt, setAmt] = useState('');
+    const [isChanged, setIsChanged] = useState(false);
+    const [payValueError, setPayValueError] = useState('');
+
+    useEffect(() => {
+        if ((!(/^[0-9]*\.[0-9]{2}$/.test(amt)) || amt > store.getState().User.balance) && isChanged) {
+            setPayValueError('Please Enter the Correct Amount and Correct Format (i.e. 25.00)');
+        } else {
+            setPayValueError('');
+        }
+    });
+
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={[MainStyles.container, {justifyContent: 'flex-start'}]}>
@@ -22,19 +36,33 @@ const RequestMoney = ({navigation, balance}) => {
                         <LInfoSectionTHB title={'YOUR CURRENT BALANCE IS'} value={balance}/>
                     </View>
                     <Text style={MainStyles.bodyText}>Please enter amount to withdraw</Text>
-                    <NormalTextInput
+                    <NumberTextInput
                         onChangeText={(text) => {
-                            setTopUpCode(text);
+                            setIsChanged(true);
+                            setAmt(text);
                         }}
-                        value={topUpCode}
-                        placeholder={'Amount to Withdraw'}
+                        value={amt}
+                        placeholder={'Enter amount to pay'}
+                        error={payValueError}
                     />
+                    <Text style={[MainStyles.bodyText, {marginTop: 5, color: 'red', fontSize: 15}]}>
+                        {payValueError}
+                    </Text>
                     <BlueButton text={'Make Request'} onPress={() => {
                         return new Promise(resolve => {
-                            navigation.replace('RequestMoneyComplete');
-                            resolve();
+                            axios.post(API_URL.REQUEST_MONEY, {amount: amt}, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                                .then(res => {
+                                    console.log(res);
+                                    navigation.replace('RequestMoneyComplete');
+                                    resolve();
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                    Alert.alert('Error Requesting Withdrawal', 'Please Try Again Later');
+                                })
+
                         });
-                    }} disable={topUpCode.length === 0}/>
+                    }} disable={amt.length === 0}/>
                 </View>
             </View>
         </TouchableWithoutFeedback>
