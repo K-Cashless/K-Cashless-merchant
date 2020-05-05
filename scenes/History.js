@@ -111,7 +111,7 @@ const HistoryCard = ({time, title, borderTop, type, transaction, from}) => {
                             fontFamily: 'proxima-regular',
                             color: 'rgb(150,150,150)',
                             fontSize: 14,
-                        }}>{time}</Text>
+                        }}>{(new Date(time)).toLocaleString()}</Text>
                     </View>
                     <View style={{flexWrap: 'wrap'}}>
                         <Text style={{
