@@ -272,9 +272,9 @@ const EditingSheet = ({editedField, refRBSheet}) => {
             return (
 
                 <View style={{marginHorizontal: 20}}>
-                    <Text style={[MainStyles.bodyText]}>Please Enter Last Name</Text>
+                    <Text style={[MainStyles.bodyText]}>Please Enter Owner Name</Text>
                     <NormalTextInput
-                        placeholder={'Enter your Owner name*'}
+                        placeholder={'Enter owner name*'}
                         onChangeText={(text) => setField(text)}
                         value={field}
                         errorStatus={errorState}
