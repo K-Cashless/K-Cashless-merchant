@@ -28,7 +28,7 @@ const SignInButton = ({navigation, email, password}) => {
                     .then(() => {
                         const infoToSend = {device: store.getState().ExpoPushToken};
                         console.log(infoToSend);
-                        axios.post(API_URL.PUSH_NOTIFICATION_TOKEN, infoToSend, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                        axios.post(API_URL.PUSH_NOTIFICATION_TOKEN, infoToSend, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                             .then(res => {
                                 console.log(res);
                                 setButtonStyle(styles.buttonContainer);

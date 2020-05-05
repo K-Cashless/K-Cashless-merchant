@@ -1,5 +1,5 @@
-import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import * as colors from '../styles/Colors';
 import {connect} from 'react-redux'
@@ -94,27 +94,31 @@ const ManageAccountButton = ({navigation}) => {
 };
 
 const SignOutButton = ({navigation}) => {
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <TouchableOpacity
+            disabled={isLoading}
             style={{position: 'absolute', bottom: 50, width: '100%'}}
             onPress={async () => {
-                await axios.post(API_URL.SIGN_OUT, {}, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                setIsLoading(true);
+                await axios.post(API_URL.SIGN_OUT, {}, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                     .then(res => {
                         console.log(res);
                         store.dispatch(actions.User.clearAllUser());
                         navigation.navigate('SignIn');
                     })
                     .catch(error => {
+                        setIsLoading(false);
                         console.log(error.response);
                         Alert.alert('Error Signing Out', 'Please Try Again');
                     });
             }}
         >
             <Text style={[MainStyles.head2Text, {fontSize: 20, textAlign: 'center', color: 'red'}]}>
-                Sign Out
+                {isLoading ? 'Signing Out...' : 'Sign Out'}
             </Text>
         </TouchableOpacity>
-    )
+    );
 };
 
 function mapStateToProps(state) {

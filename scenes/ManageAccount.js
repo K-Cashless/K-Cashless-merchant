@@ -102,7 +102,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handleStoreNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
                     store.dispatch(actions.User.setId(res.data[0].handle));
@@ -129,7 +129,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
 
             await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
                 'headers': {
-                    'Authorization': 'Mearer ' + store.getState().User.token
+                    'Authorization': 'Merchant ' + store.getState().User.token
                 }
             })
                 .then(() => {
@@ -147,7 +147,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handleOwnerNameUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
                     store.dispatch(actions.User.setId(res.data[0].handle));
@@ -174,7 +174,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
 
             await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
                 'headers': {
-                    'Authorization': 'Mearer ' + store.getState().User.token
+                    'Authorization': 'Merchant ' + store.getState().User.token
                 }
             })
                 .then(() => {
@@ -193,7 +193,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
     const handlePhoneUpdate = async () => {
         return new Promise(async (resolve, reject) => {
             let infoToSend = null;
-            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+            await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                 .then(res => {
                     // Update User Data
                     store.dispatch(actions.User.setId(res.data[0].handle));
@@ -220,7 +220,7 @@ const EditingSheet = ({editedField, refRBSheet}) => {
 
             await axios.post(API_URL.UPDATE_MERCHANT_DATA, infoToSend, {
                 'headers': {
-                    'Authorization': 'Mearer ' + store.getState().User.token
+                    'Authorization': 'Merchant ' + store.getState().User.token
                 }
             })
                 .then(() => {
@@ -394,7 +394,7 @@ const handleImagePicking = async (token, setShowLoading) => {
             axios.post(API_URL.UPLOAD_IMAGE, infoToSend, {
                 'headers': {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': 'Mearer ' + token
+                    'Authorization': 'Merchant ' + token
                 }
             })
                 .then(() => {

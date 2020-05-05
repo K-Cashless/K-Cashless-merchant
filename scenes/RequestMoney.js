@@ -50,7 +50,7 @@ const RequestMoney = ({navigation, balance}) => {
                     </Text>
                     <BlueButton text={'Make Request'} onPress={() => {
                         return new Promise(resolve => {
-                            axios.post(API_URL.REQUEST_MONEY, {amount: amt}, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+                            axios.post(API_URL.REQUEST_MONEY, {amount: amt}, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                                 .then(res => {
                                     console.log(res);
                                     navigation.replace('RequestMoneyComplete');

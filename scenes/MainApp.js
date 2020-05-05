@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Dimensions, RefreshControl, ScrollView, Text, View} from 'react-native';
+import {Alert, Dimensions, RefreshControl, ScrollView, View} from 'react-native';
 import MainStyles from '../styles/MainStyles';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createAppContainer} from 'react-navigation';
@@ -14,6 +14,7 @@ import QRCode from 'react-native-qrcode-svg';
 import MInfoSection from "../components/MInfoSection";
 import RecentActivity from '../components/RecentActivity';
 import {getAllUserData} from "../firebase/functions";
+import UserProfilePic from "../components/UserProfilePic";
 
 const HomeScreen = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
@@ -103,13 +104,13 @@ const MyQRScreen = () => {
     )
 };
 
-const MoreScreen = () => {
-    return (
-        <View style={MainStyles.container}>
-            <Text style={MainStyles.head1Text}>More</Text>
-        </View>
-    );
-};
+// const MoreScreen = () => {
+//     return (
+//         <View style={MainStyles.container}>
+//             <Text style={MainStyles.head1Text}>More</Text>
+//         </View>
+//     );
+// };
 
 
 const MainApp = createBottomTabNavigator(
@@ -131,13 +132,18 @@ const MainApp = createBottomTabNavigator(
             screen: MyQRScreen,
             navigationOptions: () => ({
                 tabBarIcon: ({focused, tintColor}) => <Icon name='qrcode' size={25} color={tintColor}/>
-            })
+            }),
         },
         More: {
-            screen: MoreScreen,
+            screen: () => null,
             navigationOptions: () => ({
-                tabBarIcon: ({focused, tintColor}) => <Icon name='dot-circle' size={25} color={tintColor}/>
-            })
+                tabBarIcon: <UserProfilePic/>,
+                tabBarOnPress: ({navigation}) => {
+                    navigation.navigate('Profile');
+                },
+                tabBarLabel: () => null,
+            }),
+
         },
     },
     {

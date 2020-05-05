@@ -5,7 +5,7 @@ import * as actions from '../actions';
 
 export const getAllUserData = () => {
     return new Promise(async (resolve, reject) => {
-        await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+        await axios.get(API_URL.GET_MERCHANT_DATA, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
             .then(res => {
                 console.log(res.data[0]);
                 store.dispatch(actions.User.setId(res.data[0].handle));
@@ -19,7 +19,7 @@ export const getAllUserData = () => {
             .catch(error => {
                 reject(error);
             });
-        await axios.get(API_URL.GET_MERCHANT_TRANSACTION, {'headers': {'Authorization': 'Mearer ' + store.getState().User.token}})
+        await axios.get(API_URL.GET_MERCHANT_TRANSACTION, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
             .then(res => {
                 console.log(res);
                 let arr = res.data;
