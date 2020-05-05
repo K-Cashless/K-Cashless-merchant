@@ -56,7 +56,7 @@ const ManageAccount = ({navigation, User}) => {
                         </View>
 
 
-                        <UserInfo title={'Username'} value={User.id} refRBSheet={refRBSheet}
+                        <UserInfo title={'Merchant ID'} value={User.id} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField} editable={false}/>
                         <UserInfo title={'Email'} value={User.email} refRBSheet={refRBSheet}
                                   setEditedField={setEditedField} editable={false}/>

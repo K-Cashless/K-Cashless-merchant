@@ -56,13 +56,14 @@ const style = StyleSheet.create({
         flex: 2,
         marginTop: 20,
         justifyContent: 'flex-start',
+        alignItems: 'center',
     },
     descriptionText: {
         fontFamily: 'proxima-bold',
         justifyContent: 'flex-start',
         fontSize: 18,
         color: 'white',
-        alignSelf: 'center',
+        textAlign: 'center',
     },
     gridRowContainer: {
         flex: 1,
