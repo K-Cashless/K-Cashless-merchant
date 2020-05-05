@@ -14,7 +14,6 @@ const SignUpP2 = ({navigation}) => {
     // const [imgUri, setImgUri] = useState('');
     const [info, setInfo] = useState(navigation.getParam('info', {}));
     let errorState = {
-        storeUserName: useState(true),
         storeName: useState(true),
         ownerName: useState(true),
         phone: useState(true),
@@ -24,8 +23,7 @@ const SignUpP2 = ({navigation}) => {
         setAllowProceed(
             errorState.storeName[0] === false &&
             errorState.ownerName[0] === false &&
-            errorState.phone[0] === false &&
-            errorState.storeName[0] === false
+            errorState.phone[0] === false
         );
     });
 
@@ -35,7 +33,6 @@ const SignUpP2 = ({navigation}) => {
                 email: info.email,
                 password: info.password,
                 confirmPassword: info.confirmPassword,
-                handle: info.storeUserName,
                 storeName: info.storeName,
                 ownerName: info.ownerName,
                 phone: info.phone,
@@ -68,16 +65,16 @@ const SignUpP2 = ({navigation}) => {
                     <View style={{marginHorizontal: 20, marginTop: '10%', justifyContent: 'flex-start'}}>
                         <SubScreenHeader title={'Sign Up'} navigation={navigation} backButton={true}/>
                         <View style={{marginTop: 20}}>
-                            <NormalTextInput
-                                placeholder={'Store User Name*'}
-                                onChangeText={(text) => setInfo({...info, storeUserName: text})}
-                                value={info.storeUserName}
-                                errorStatus={errorState.storeUserName}
-                                errorRule={[
-                                    {pattern: /.+/, message: 'Store User Name Must Not Be Empty'},
-                                    {pattern: /^[^ ]+$/, message: 'Store User Name Must Not Contains Space'},
-                                ]}
-                            />
+                            {/*<NormalTextInput*/}
+                            {/*    placeholder={'Store User Name*'}*/}
+                            {/*    onChangeText={(text) => setInfo({...info, storeUserName: text})}*/}
+                            {/*    value={info.storeUserName}*/}
+                            {/*    errorStatus={errorState.storeUserName}*/}
+                            {/*    errorRule={[*/}
+                            {/*        {pattern: /.+/, message: 'Store User Name Must Not Be Empty'},*/}
+                            {/*        {pattern: /^[^ ]+$/, message: 'Store User Name Must Not Contains Space'},*/}
+                            {/*    ]}*/}
+                            {/*/>*/}
                             <NormalTextInput
                                 placeholder={'Store Name*'}
                                 onChangeText={(text) => setInfo({...info, storeName: text})}

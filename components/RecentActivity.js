@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import store from '../store';
+import Icon from 'react-native-vector-icons/Feather';
 
 
 const RecentActivity = () => {
@@ -24,12 +25,17 @@ const RecentActivity = () => {
             }}>
                 <View style={{height: '80%', flexDirection: 'row', justifyItems: 'center'}}>
                     <View style={{flex: 1, justifyContent: 'center'}}>
+
                         <Text style={{
                             flex: 2,
                             fontFamily: 'proxima-regular',
                             color: 'white',
                             fontSize: 18,
-                        }}>{recentData.info}</Text>
+                        }}>
+                            {
+                                green ? (<><Icon name='arrow-down-left' color={'rgb(77, 240, 96)'}
+                                                 size={14}/> {'Paid from ' + recentData.from}</>) : null}
+                        </Text>
                         <Text style={{
                             flex: 1,
                             fontFamily: 'proxima-regular',

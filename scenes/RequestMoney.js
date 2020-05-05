@@ -16,7 +16,7 @@ const RequestMoney = ({navigation, balance}) => {
     const [payValueError, setPayValueError] = useState('');
 
     useEffect(() => {
-        if ((!(/^[0-9]*\.[0-9]{2}$/.test(amt)) || amt > store.getState().User.balance) && isChanged) {
+        if ((!(/^[0-9]*\.[0-9]{2}$/.test(amt)) || amt > store.getState().User.balance || amt <= 0) && isChanged) {
             setPayValueError('Please Enter the Correct Amount and Correct Format (i.e. 25.00)');
         } else {
             setPayValueError('');
@@ -44,6 +44,7 @@ const RequestMoney = ({navigation, balance}) => {
                         value={amt}
                         placeholder={'Enter amount to pay'}
                         error={payValueError}
+                        onBlur={() => setAmt((Math.floor(amt * 1)).toFixed(2))}
                     />
                     <Text style={[MainStyles.bodyText, {marginTop: 5, color: 'red', fontSize: 15}]}>
                         {payValueError}
@@ -62,7 +63,7 @@ const RequestMoney = ({navigation, balance}) => {
                                 })
 
                         });
-                    }} disable={amt.length === 0}/>
+                    }} disable={payValueError.length !== 0}/>
                 </View>
             </View>
         </TouchableWithoutFeedback>

@@ -274,12 +274,12 @@ const EditingSheet = ({editedField, refRBSheet}) => {
                 <View style={{marginHorizontal: 20}}>
                     <Text style={[MainStyles.bodyText]}>Please Enter Last Name</Text>
                     <NormalTextInput
-                        placeholder={'Enter your last name*'}
+                        placeholder={'Enter your Owner name*'}
                         onChangeText={(text) => setField(text)}
                         value={field}
                         errorStatus={errorState}
                         errorRule={[
-                            {pattern: /.+/, message: 'Last Name Must Not Be Empty'},
+                            {pattern: /.+/, message: 'Owner Name Must Not Be Empty'},
                         ]}
                     />
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center'}}>

@@ -1,10 +1,10 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import * as colors from '../styles/Colors';
-import store from '../store';
+import {connect} from 'react-redux';
 
 
-const AccountQuickSum = () => {
+const AccountQuickSum = ({User}) => {
     return (
         <View style={{
             backgroundColor: colors.primary,
@@ -21,24 +21,23 @@ const AccountQuickSum = () => {
                 flexDirection: 'row',
             }}>
                 <View style={{flex: 3, height: 110, justifyContent: 'flex-start'}}>
-                    {/*Sample Data*/}
                     <Text style={{
                         fontFamily: 'proxima-bold',
                         fontSize: 25,
                         color: 'white',
-                    }}>{store.getState().User.storeName}</Text>
+                    }}>{User.storeName}</Text>
                     <Text style={{
                         fontFamily: 'proxima-regular',
                         fontSize: 18,
                         color: 'white',
-                    }}>{store.getState().User.ownerName}</Text>
+                    }}>{User.ownerName}</Text>
                     <View style={{flex: 1, justifyContent: 'flex-end'}}>
                         <Text style={{
                             fontFamily: 'proxima-bold',
                             fontSize: 25,
                             color: 'white',
                             textAlign: 'right'
-                        }}>{store.getState().User.balance.toFixed(2)} {'\u0E3F'}</Text>
+                        }}>{User.balance.toFixed(2)} {'\u0E3F'}</Text>
                     </View>
                 </View>
             </View>
@@ -47,4 +46,10 @@ const AccountQuickSum = () => {
     )
 };
 
-export default AccountQuickSum;
+function mapStateToProps(state) {
+    return ({
+        User: state.User
+    });
+}
+
+export default connect(mapStateToProps)(AccountQuickSum);

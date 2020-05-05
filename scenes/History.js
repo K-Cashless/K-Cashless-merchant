@@ -5,7 +5,7 @@ import SubScreenHeader from "../components/SubScreenHeader";
 import store from '../store';
 import {connect} from 'react-redux';
 import {getAllUserData} from '../firebase/functions';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 async function HistoryLoader() {
     await getAllUserData()
@@ -59,7 +59,7 @@ const HistoryList = () => {
                 renderItem={({item}) => {
                     return (
                         <HistoryCard title={item.info} time={item.createdAt}
-                                     transaction={item.amount} type={item.info} to={item.to}/>
+                                     transaction={item.amount} type={item.info} to={item.to} from={item.from}/>
                     );
                 }}
                 keyExtractor={item => item.key}
@@ -77,7 +77,7 @@ const HistoryList = () => {
 
 };
 
-const HistoryCard = ({time, title, borderTop, type, transaction, to}) => {
+const HistoryCard = ({time, title, borderTop, type, transaction, from}) => {
     const [green, setGreen] = useState(false);
 
     useEffect(() => {
@@ -101,7 +101,10 @@ const HistoryCard = ({time, title, borderTop, type, transaction, to}) => {
                             fontFamily: 'proxima-bold',
                             color: 'white',
                             fontSize: 18
-                        }}>{title} {green ? (<><Icon name='arrow-right' color={'white'} size={14}/> {to}</>) : null}
+                        }}>{
+                            green ? (<><Icon name='arrow-down-left' color={'rgb(77, 240, 96)'}
+                                             size={14}/> {'Paid from ' + from}</>) : (title)
+                        }
                         </Text>
                         <Text style={{
                             flex: 1,
