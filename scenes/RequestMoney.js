@@ -50,7 +50,7 @@ const RequestMoney = ({navigation, balance}) => {
                         {payValueError}
                     </Text>
                     <BlueButton text={'Make Request'} onPress={() => {
-                        return new Promise(resolve => {
+                        return new Promise((resolve, reject) => {
                             axios.post(API_URL.REQUEST_MONEY, {amount: amt}, {'headers': {'Authorization': 'Merchant ' + store.getState().User.token}})
                                 .then(res => {
                                     console.log(res);
@@ -58,12 +58,13 @@ const RequestMoney = ({navigation, balance}) => {
                                     resolve();
                                 })
                                 .catch(error => {
-                                    console.log(error);
-                                    Alert.alert('Error Requesting Withdrawal', 'Please Try Again Later');
+                                    console.log(error.response);
+                                    Alert.alert('Error Requesting Withdrawal', error.response.data.message || 'Please Try Again Later');
+                                    reject();
                                 })
 
                         });
-                    }} disable={payValueError.length !== 0}/>
+                    }} disable={payValueError.length !== 0 || !isChanged}/>
                 </View>
             </View>
         </TouchableWithoutFeedback>
